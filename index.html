@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title data-i18n="page_title">Ramazan İmsakiyesi | Ayetin Vakti</title>
+    <meta name="theme-color" content="#10b981">
+    
+    <script>
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        if (savedTheme === 'light') {
+            document.documentElement.setAttribute('data-theme', 'light');
+        } else {
+            document.documentElement.removeAttribute('data-theme');
+        }
+
+        const savedAccent = localStorage.getItem('custom_accent');
+        const savedText = localStorage.getItem('custom_text');
+
+        if (savedAccent) document.documentElement.style.setProperty('--accent-color', savedAccent);
+        if (savedText) document.documentElement.style.setProperty('--text-color', savedText);
+
+        const savedBg = localStorage.getItem('custom_bg');
+        if (savedBg && savedTheme !== 'light') {
+            document.documentElement.style.setProperty('--bg-color', savedBg);
+            document.documentElement.style.setProperty('--card-bg', savedBg);
+        }
+
+        const currentLang = localStorage.getItem('user_lang') || 'tr';
+        if (currentLang === 'ar') {
+            document.documentElement.setAttribute('dir', 'rtl');
+        } else {
+            document.documentElement.setAttribute('dir', 'ltr');
+        }
+    </script>
+
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent-color: #10b981;
+            --accent-hover: #047857;
+            --text-color: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --btn-bg: rgba(255, 255, 255, 0.05);
+            --btn-hover: rgba(255, 255, 255, 0.1);
+            --shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        [data-theme="light"] {
+            --bg-color: #f1f5f9 !important;
+            --card-bg: #ffffff !important;
+            --accent-color: #059669 !important;
+            --accent-hover: #047857 !important;
+            --text-color: #0f172a !important;
+            --text-muted: #64748b !important;
+            --border-color: #cbd5e1 !important;
+            --btn-bg: #f8fafc !important;
+            --btn-hover: #e2e8f0 !important;
+            --shadow: 0 10px 25px rgba(0, 0, 0, 0.08) !important;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body { font-family: var(--font-family); background-color: var(--bg-color); color: var(--text-color); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 16px; transition: background-color 0.3s ease, color 0.3s ease; }
+        
+        .container { width: 100%; max-width: 650px; display: flex; flex-direction: column; gap: 16px; }
+        
+        .navbar { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; box-shadow: var(--shadow); transition: 0.3s; }
+        [dir="rtl"] .navbar { flex-direction: row-reverse; }
+
+        .circle-btn { width: 42px; height: 42px; border-radius: 50%; background: var(--btn-bg); border: 1px solid var(--border-color); color: var(--text-color); display: flex; align-items: center; justify-content: center; cursor: pointer; text-decoration: none; font-size: 1.2rem; transition: 0.2s; }
+        .circle-btn:hover { border-color: var(--accent-color); color: var(--accent-color); background: var(--btn-hover); }
+        
+        .app-title { font-size: 1.1rem; font-weight: 700; color: var(--accent-color); text-align: center; }
+
+        /* Üst Bilgi ve Şehir Seçimi */
+        .top-banner { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 18px; padding: 18px; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow); }
+        .location-info { display: flex; flex-direction: column; gap: 2px; }
+        .location-label { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .location-name { font-size: 1.05rem; font-weight: 700; color: var(--accent-color); }
+        
+        .city-select { background: var(--btn-bg); border: 1px solid var(--border-color); color: var(--text-color); padding: 8px 12px; border-radius: 12px; font-weight: 600; font-size: 0.85rem; cursor: pointer; outline: none; transition: 0.2s; }
+        .city-select:hover, .city-select:focus { border-color: var(--accent-color); background: var(--btn-hover); }
+        .city-select option { background: var(--card-bg); color: var(--text-color); }
+
+        /* Geri Sayım Kartı */
+        .countdown-card { background: linear-gradient(135deg, var(--card-bg), var(--btn-bg)); border: 1px solid var(--border-color); border-radius: 18px; padding: 22px; text-align: center; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 12px; position: relative; overflow: hidden; }
+        .countdown-title { font-size: 0.9rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+        .countdown-target { font-size: 1.3rem; font-weight: 700; color: var(--accent-color); }
+        .timer-grid { display: flex; justify-content: center; gap: 16px; margin-top: 4px; }
+        .timer-box { background: var(--btn-bg); border: 1px solid var(--border-color); padding: 10px 14px; border-radius: 12px; min-width: 70px; display: flex; flex-direction: column; gap: 2px; }
+        .timer-val { font-size: 1.35rem; font-weight: 800; color: var(--text-color); }
+        .timer-lbl { font-size: 0.7rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
+
+        /* Vakitler Grid */
+        .times-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        @media(max-width: 480px) { .times-grid { grid-template-columns: repeat(2, 1fr); } }
+        
+        .time-box { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 14px; padding: 14px; text-align: center; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 6px; transition: 0.2s; }
+        .time-box.active-vakit { border-color: var(--accent-color); background: var(--btn-hover); transform: translateY(-2px); }
+        .time-label { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; }
+        .time-value { font-size: 1.1rem; font-weight: 700; color: var(--accent-color); }
+
+        /* Aylık Takvim Bölümü */
+        .calendar-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 18px; padding: 18px; display: flex; flex-direction: column; gap: 14px; box-shadow: var(--shadow); }
+        .section-title { font-size: 1rem; font-weight: 700; color: var(--accent-color); display: flex; align-items: center; gap: 6px; }
+        
+        .calendar-table-wrapper { max-height: 380px; overflow-y: auto; border-radius: 12px; border: 1px solid var(--border-color); }
+        .calendar-table-wrapper::-webkit-scrollbar { width: 6px; }
+        .calendar-table-wrapper::-webkit-scrollbar-track { background: transparent; }
+        .calendar-table-wrapper::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+
+        .cal-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; text-align: center; }
+        .cal-table th { background: var(--btn-bg); color: var(--text-muted); padding: 10px 6px; font-weight: 600; position: sticky; top: 0; z-index: 2; border-bottom: 1px solid var(--border-color); }
+        .cal-table td { padding: 10px 6px; border-bottom: 1px solid var(--border-color); color: var(--text-color); }
+        .cal-table tr:last-child td { border-bottom: none; }
+        .cal-table tr.today-row { background: var(--btn-hover); font-weight: 700; color: var(--accent-color); }
+        .cal-table tr.today-row td { color: var(--accent-color); }
+
+        .footer { margin: 20px 0; text-align: center; font-size: 0.85rem; color: var(--text-muted); }
+        .footer span { color: var(--accent-color); font-weight: 600; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header class="navbar">
+        <a href="../" class="circle-btn" title="Geri Dön">←</a>
+        <div class="app-title" data-i18n="app_title">Ramazan İmsakiyesi</div>
+        <button class="circle-btn" onclick="toggleTheme()" id="theme-btn" title="Tema Değiştir">☀️</button>
+    </header>
+
+    <!-- Üst Bilgi ve Şehir Seçimi -->
+    <div class="top-banner">
+        <div class="location-info">
+            <span class="location-label">Seçilen İl</span>
+            <span class="location-name" id="selected-city-name">İstanbul</span>
+        </div>
+        <select class="city-select" id="city-selector" onchange="changeCity(this.value)">
+            <option value="İstanbul">İstanbul</option>
+            <option value="Ankara">Ankara</option>
+            <option value="İzmir">İzmir</option>
+            <option value="Bursa">Bursa</option>
+            <option value="Konya">Konya</option>
+            <option value="Antalya">Antalya</option>
+            <option value="Gaziantep">Gaziantep</option>
+            <option value="Trabzon">Trabzon</option>
+            <option value="Erzurum">Erzurum</option>
+            <option value="Diyarbakır">Diyarbakır</option>
+        </select>
+    </div>
+
+    <!-- Geri Sayım Kartı -->
+    <div class="countdown-card">
+        <div class="countdown-title" id="countdown-label">İftara Kalan Süre</div>
+        <div class="countdown-target" id="countdown-target-text">Akşam Vaktine</div>
+        <div class="timer-grid">
+            <div class="timer-box">
+                <span class="timer-val" id="hours">00</span>
+                <span class="timer-lbl">Saat</span>
+            </div>
+            <div class="timer-box">
+                <span class="timer-val" id="minutes">00</span>
+                <span class="timer-lbl">Dakika</span>
+            </div>
+            <div class="timer-box">
+                <span class="timer-val" id="seconds">00</span>
+                <span class="timer-lbl">Saniye</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vakitler Kutusu -->
+    <div class="times-grid" id="vakitler-grid">
+        <div class="time-box" id="box-imsak">
+            <span class="time-label">İmsak (Sahur)</span>
+            <span class="time-value" id="vakit-imsak">04:45</span>
+        </div>
+        <div class="time-box" id="box-gunes">
+            <span class="time-label">Güneş</span>
+            <span class="time-value" id="vakit-gunes">06:10</span>
+        </div>
+        <div class="time-box" id="box-ogle">
+            <span class="time-label">Öğle</span>
+            <span class="time-value" id="vakit-ogle">13:15</span>
+        </div>
+        <div class="time-box" id="box-ikindi">
+            <span class="time-label">İkindi</span>
+            <span class="time-value" id="vakit-ikindi">16:50</span>
+        </div>
+        <div class="time-box" id="box-aksam">
+            <span class="time-label">Akşam (İftar)</span>
+            <span class="time-value" id="vakit-aksam">19:55</span>
+        </div>
+        <div class="time-box" id="box-yatsi">
+            <span class="time-label">Yatsı</span>
+            <span class="time-value" id="vakit-yatsi">21:15</span>
+        </div>
+    </div>
+
+    <!-- Aylık İmsakiye Tablosu -->
+    <div class="calendar-card">
+        <div class="section-title">📅 Aylık İmsakiye Takvimi</div>
+        <div class="calendar-table-wrapper">
+            <table class="cal-table">
+                <thead>
+                    <tr>
+                        <th>Gün</th>
+                        <th>Tarih</th>
+                        <th>İmsak</th>
+                        <th>Güneş</th>
+                        <th>Öğle</th>
+                        <th>İkindi</th>
+                        <th>Akşam</th>
+                        <th>Yatsı</th>
+                    </tr>
+                </thead>
+                <tbody id="imsakiye-tbody">
+                    <!-- Dinamik doldurulacak -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="footer">© Ayetin Vakti • <span data-i18n="footer_text">Huzur ve İbadet Rehberliğiniz</span></div>
+
+<script>
+    const translations = {
+        tr: {
+            page_title: "Ramazan İmsakiyesi | Ayetin Vakti",
+            app_title: "Ramazan İmsakiyesi",
+            footer_text: "Huzur ve İbadet Rehberliğiniz"
+        }
+    };
+
+    const activeLang = localStorage.getItem('user_lang') || 'tr';
+    const t = translations[activeLang] || translations['tr'];
+
+    // Örnek İmsakiye Veritabanı (Simüle edilmiş örnek vakitler - Şehre göre ufak kaydırmalarla zenginleştirilebilir)
+    const imsakiyeData = [
+        { gun: 1, tarih: "1 Mart", imsak: "05:15", gunes: "06:40", ogle: "13:20", ikindi: "16:45", aksam: "19:50", yatsı: "21:10" },
+        { gun: 2, tarih: "2 Mart", imsak: "05:14", gunes: "06:38", ogle: "13:20", ikindi: "16:46", aksam: "19:51", yatsı: "21:11" },
+        { gun: 3, tarih: "3 Mart", imsak: "05:12", gunes: "06:37", ogle: "13:20", ikindi: "16:47", aksam: "19:52", yatsı: "21:12" },
+        { gun: 4, tarih: "4 Mart", imsak: "05:11", gunes: "06:35", ogle: "13:20", ikindi: "16:48", aksam: "19:53", yatsı: "21:13" },
+        { gun: 5, tarih: "5 Mart", imsak: "05:09", gunes: "06:34", ogle: "13:20", ikindi: "16:49", aksam: "19:54", yatsı: "21:14" },
+        { gun: 6, tarih: "6 Mart", imsak: "05:08", gunes: "06:32", ogle: "13:20", ikindi: "16:50", aksam: "19:55", yatsı: "21:15" },
+        { gun: 7, tarih: "7 Mart", imsak: "05:06", gunes: "06:31", ogle: "13:19", ikindi: "16:51", aksam: "19:56", yatsı: "21:16" },
+        { gun: 8, tarih: "8 Mart", imsak: "05:05", gunes: "06:29", ogle: "13:19", ikindi: "16:52", aksam: "19:57", yatsı: "21:17" },
+        { gun: 9, tarih: "9 Mart", imsak: "05:03", gunes: "06:28", ogle: "13:19", ikindi: "16:53", aksam: "19:58", yatsı: "21:18" },
+        { gun: 10, tarih: "10 Mart", imsak: "05:02", gunes: "06:26", ogle: "13:19", ikindi: "16:54", aksam: "19:59", yatsı: "21:19" },
+        { gun: 11, tarih: "11 Mart", imsak: "05:00", gunes: "06:25", ogle: "13:19", ikindi: "16:55", aksam: "20:00", yatsı: "21:20" },
+        { gun: 12, tarih: "12 Mart", imsak: "04:58", gunes: "06:23", ogle: "13:18", ikindi: "16:55", aksam: "20:01", yatsı: "21:21" },
+        { gun: 13, tarih: "13 Mart", imsak: "04:57", gunes: "06:22", ogle: "13:18", ikindi: "16:56", aksam: "20:02", yatsı: "21:22" },
+        { gun: 14, tarih: "14 Mart", imsak: "04:55", gunes: "06:20", ogle: "13:18", ikindi: "16:57", aksam: "20:03", yatsı: "21:23" },
+        { gun: 15, tarih: "15 Mart", imsak: "04:54", gunes: "06:19", ogle: "13:18", ikindi: "16:58", aksam: "20:04", yatsı: "21:24" },
+        { gun: 16, tarih: "16 Mart", imsak: "04:52", gunes: "06:17", ogle: "13:17", ikindi: "16:59", aksam: "20:05", yatsı: "21:25" },
+        { gun: 17, tarih: "17 Mart", imsak: "04:50", gunes: "06:15", ogle: "13:17", ikindi: "17:00", aksam: "20:06", yatsı: "21:26" },
+        { gun: 18, tarih: "18 Mart", imsak: "04:48", gunes: "06:14", ogle: "13:17", ikindi: "17:01", aksam: "20:07", yatsı: "21:28" },
+        { gun: 19, tarih: "19 Mart", imsak: "04:47", gunes: "06:12", ogle: "13:17", ikindi: "17:02", aksam: "20:08", yatsı: "21:29" },
+        { gun: 20, tarih: "20 Mart", imsak: "04:45", gunes: "06:10", ogle: "13:16", ikindi: "17:02", aksam: "20:09", yatsı: "21:30" },
+        { gun: 21, tarih: "21 Mart", imsak: "04:43", gunes: "06:09", ogle: "13:16", ikindi: "17:03", aksam: "20:10", yatsı: "21:31" },
+        { gun: 22, tarih: "22 Mart", imsak: "04:41", gunes: "06:07", ogle: "13:16", ikindi: "17:04", aksam: "20:11", yatsı: "21:32" },
+        { gun: 23, tarih: "23 Mart", imsak: "04:39", gunes: "06:05", ogle: "13:15", ikindi: "17:05", aksam: "20:12", yatsı: "21:34" },
+        { gun: 24, tarih: "24 Mart", imsak: "04:37", gunes: "06:04", ogle: "13:15", ikindi: "17:06", aksam: "20:13", yatsı: "21:35" },
+        { gun: 25, tarih: "25 Mart", imsak: "04:35", gunes: "06:02", ogle: "13:15", ikindi: "17:06", aksam: "20:14", yatsı: "21:36" },
+        { gun: 26, tarih: "26 Mart", imsak: "04:34", gunes: "06:00", ogle: "13:15", ikindi: "17:07", aksam: "20:15", yatsı: "21:37" },
+        { gun: 27, tarih: "27 Mart", imsak: "04:32", gunes: "05:58", ogle: "13:14", ikindi: "17:08", aksam: "20:16", yatsı: "21:39" },
+        { gun: 28, tarih: "28 Mart", imsak: "04:30", gunes: "05:57", ogle: "13:14", ikindi: "17:09", aksam: "20:17", yatsı: "21:40" },
+        { gun: 29, tarih: "29 Mart", imsak: "04:28", gunes: "05:55", ogle: "13:14", ikindi: "17:09", aksam: "20:18", yatsı: "21:41" },
+        { gun: 30, tarih: "30 Mart", imsak: "04:26", gunes: "05:53", ogle: "13:13", ikindi: "17:10", aksam: "20:19", yatsı: "21:43" }
+    ];
+
+    function renderTable(todayIndex = 5) {
+        const tbody = document.getElementById('imsakiye-tbody');
+        tbody.innerHTML = '';
+
+        imsakiyeData.forEach((row, index) => {
+            const tr = document.createElement('tr');
+            if (index === todayIndex) {
+                tr.className = 'today-row';
+            }
+            tr.innerHTML = `
+                <td>${row.gun}</td>
+                <td>${row.tarih}</td>
+                <td>${row.imsak}</td>
+                <td>${row.gunes}</td>
+                <td>${row.ogle}</td>
+                <td>${row.ikindi}</td>
+                <td>${row.aksam}</td>
+                <td>${row.yatsı}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+
+        // Bugünün verilerini kartlara yansıt
+        const today = imsakiyeData[todayIndex] || imsakiyeData[0];
+        document.getElementById('vakit-imsak').innerText = today.imsak;
+        document.getElementById('vakit-gunes').innerText = today.gunes;
+        document.getElementById('vakit-ogle').innerText = today.ogle;
+        document.getElementById('vakit-ikindi').innerText = today.ikindi;
+        document.getElementById('vakit-aksam').innerText = today.aksam;
+        document.getElementById('vakit-yatsi').innerText = today.yatsı;
+    }
+
+    function changeCity(cityName) {
+        document.getElementById('selected-city-name').innerText = cityName;
+        localStorage.setItem('selected_city', cityName);
+        // İsteğe bağlı olarak şehir bazlı dakikalık kaydırma simülasyonu eklenebilir.
+    }
+
+    // Basit Geri Sayım Simülasyonu (Akşam vaktine doğru)
+    function updateCountdown() {
+        // Örnek sabit bir sayaç mantığı veya aktif vakit hesaplayıcısı
+        const now = new Date();
+        let targetHours = 19;
+        let targetMinutes = 55;
+        let targetSeconds = 0;
+
+        let diff = (targetHours * 3600 + targetMinutes * 60) - (now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds());
+        if (diff < 0) diff += 86400; // Gece yarısı döngüsü
+
+        const h = Math.floor(diff / 3600);
+        const m = Math.floor((diff % 3600) / 60);
+        const s = diff % 60;
+
+        document.getElementById('hours').innerText = String(h).padStart(2, '0');
+        document.getElementById('minutes').innerText = String(m).padStart(2, '0');
+        document.getElementById('seconds').innerText = String(s).padStart(2, '0');
+    }
+
+    // --- TEMA YÖNETİMİ ---
+    function initTheme() {
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        applyTheme(savedTheme);
+    }
+
+    function toggleTheme() {
+        const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+        const newTheme = isLight ? 'dark' : 'light';
+        applyTheme(newTheme);
+    }
+
+    function applyTheme(theme) {
+        const btn = document.getElementById('theme-btn');
+        if (theme === 'light') {
+            document.documentElement.setAttribute('data-theme', 'light');
+            if (btn) btn.innerHTML = '🌙'; 
+            localStorage.setItem('theme', 'light');
+        } else {
+            document.documentElement.removeAttribute('data-theme');
+            if (btn) btn.innerHTML = '☀️'; 
+            localStorage.setItem('theme', 'dark');
+        }
+    }
+
+    window.onload = () => {
+        initTheme();
+        
+        const savedCity = localStorage.getItem('selected_city') || 'İstanbul';
+        document.getElementById('selected-city-name').innerText = savedCity;
+        document.getElementById('city-selector').value = savedCity;
+
+        renderTable(5); // Örnek olarak 6. günü bugün seçtik
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (t[key]) {
+                if (el.tagName === 'TITLE') document.title = t[key];
+                else el.innerHTML = t[key];
+            }
+        });
+    };
+</script>
+</body>
+</html>
