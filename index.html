@@ -6,7 +6,7 @@
     <meta http-equiv="Expires" content="0">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title data-i18n="page_title">Dev İlmihal Kütüphanesi | Ayetin Vakti</title>
+    <title data-i18n="page_title">Ramazan İmsakiyesi | Ayetin Vakti</title>
     <meta name="theme-color" content="#10b981">
     
     <script>
@@ -68,7 +68,7 @@
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         body { font-family: var(--font-family); background-color: var(--bg-color); color: var(--text-color); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 16px; transition: background-color 0.3s ease, color 0.3s ease; }
         
-        .container { width: 100%; max-width: 680px; display: flex; flex-direction: column; gap: 16px; }
+        .container { width: 100%; max-width: 650px; display: flex; flex-direction: column; gap: 16px; }
         
         .navbar { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; box-shadow: var(--shadow); transition: 0.3s; }
         [dir="rtl"] .navbar { flex-direction: row-reverse; }
@@ -78,48 +78,66 @@
         
         .app-title { font-size: 1.1rem; font-weight: 700; color: var(--accent-color); text-align: center; display: flex; align-items: center; gap: 6px; }
 
-        /* Hero Banner */
-        .ilmihal-hero { background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), var(--card-bg)); border: 1px solid var(--border-color); border-radius: 20px; padding: 24px; text-align: center; position: relative; overflow: hidden; box-shadow: var(--shadow); }
+        /* Estetik Ramazan Temalı Banner / Grafik Alanı */
+        .ramadan-hero-banner { background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), var(--card-bg)); border: 1px solid var(--border-color); border-radius: 20px; padding: 24px; text-align: center; position: relative; overflow: hidden; box-shadow: var(--shadow); }
+        .ramadan-hero-banner::before { content: "🌙"; position: absolute; font-size: 5rem; right: -10px; bottom: -20px; opacity: 0.08; pointer-events: none; }
         .hero-badge { display: inline-block; background: var(--btn-bg); border: 1px solid var(--border-color); padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; color: var(--accent-color); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 1px; }
         .hero-title { font-size: 1.3rem; font-weight: 800; color: var(--text-color); margin-bottom: 4px; }
         .hero-subtitle { font-size: 0.85rem; color: var(--text-muted); }
 
-        /* Arama Kutusu */
-        .search-box-wrapper { position: relative; width: 100%; }
-        .search-input { width: 100%; background: var(--card-bg); border: 1px solid var(--border-color); padding: 14px 18px 14px 45px; border-radius: 16px; color: var(--text-color); font-size: 0.95rem; outline: none; box-shadow: var(--shadow); transition: 0.2s; }
-        .search-input:focus { border-color: var(--accent-color); background: var(--btn-hover); }
-        .search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); font-size: 1.1rem; color: var(--text-muted); pointer-events: none; }
-        [dir="rtl"] .search-input { padding: 14px 45px 14px 18px; }
-        [dir="rtl"] .search-icon { left: auto; right: 16px; }
+        /* Üst Bilgi ve Şehir Seçimi */
+        .top-banner { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 18px; padding: 18px; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow); }
+        .location-info { display: flex; flex-direction: column; gap: 2px; }
+        .location-label { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .location-name { font-size: 1.05rem; font-weight: 700; color: var(--accent-color); }
+        
+        .city-select { background: var(--btn-bg); border: 1px solid var(--border-color); color: var(--text-color); padding: 8px 12px; border-radius: 12px; font-weight: 600; font-size: 0.85rem; cursor: pointer; outline: none; transition: 0.2s; max-width: 180px; }
+        .city-select:hover, .city-select:focus { border-color: var(--accent-color); background: var(--btn-hover); }
+        .city-select option { background: var(--card-bg); color: var(--text-color); }
 
-        /* Kategori Sekmeleri */
-        .categories-scroll { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
-        .categories-scroll::-webkit-scrollbar { display: none; }
-        .cat-chip { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-muted); padding: 8px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; cursor: pointer; white-space: nowrap; transition: 0.2s; }
-        .cat-chip:hover, .cat-chip.active { background: var(--accent-color); color: #fff; border-color: var(--accent-color); }
+        /* Geri Sayım Kartı */
+        .countdown-card { background: linear-gradient(135deg, var(--card-bg), var(--btn-bg)); border: 1px solid var(--border-color); border-radius: 18px; padding: 22px; text-align: center; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 12px; position: relative; overflow: hidden; }
+        .countdown-title { font-size: 0.9rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+        .countdown-target { font-size: 1.2rem; font-weight: 700; color: var(--accent-color); }
+        
+        .timer-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 4px; }
+        @media(max-width: 480px) { .timer-grid { grid-template-columns: repeat(4, 1fr); gap: 6px; } }
+        
+        .timer-box { background: var(--btn-bg); border: 1px solid var(--border-color); padding: 10px 6px; border-radius: 12px; display: flex; flex-direction: column; gap: 2px; align-items: center; justify-content: center; }
+        .timer-val { font-size: 1.15rem; font-weight: 800; color: var(--text-color); }
+        .timer-lbl { font-size: 0.65rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
 
-        /* İçerik / Madde Listesi (Akordeon Kartlar) */
-        .topics-list { display: flex; flex-direction: column; gap: 12px; }
+        /* Vakitler Grid */
+        .times-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        @media(max-width: 480px) { .times-grid { grid-template-columns: repeat(2, 1fr); } }
         
-        .topic-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); transition: 0.2s; }
-        .topic-header { padding: 16px 18px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; gap: 10px; }
-        .topic-header:hover { background: var(--btn-hover); }
-        
-        .topic-info { display: flex; flex-direction: column; gap: 4px; }
-        .topic-category-tag { font-size: 0.7rem; font-weight: 700; color: var(--accent-color); text-transform: uppercase; letter-spacing: 0.5px; }
-        .topic-title { font-size: 1.02rem; font-weight: 700; color: var(--text-color); }
-        
-        .topic-arrow { font-size: 0.9rem; color: var(--text-muted); transition: transform 0.3s ease; }
-        .topic-card.open .topic-arrow { transform: rotate(180deg); color: var(--accent-color); }
+        .time-box { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 14px; padding: 14px; text-align: center; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 6px; transition: 0.2s; }
+        .time-box.active-vakit { border-color: var(--accent-color); background: var(--btn-hover); transform: translateY(-2px); }
+        .time-label { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; }
+        .time-value { font-size: 1.1rem; font-weight: 700; color: var(--accent-color); }
 
-        .topic-body { max-height: 0; overflow: hidden; transition: max-height 0.35s cubic-bezier(0, 1, 0, 1); background: var(--btn-bg); border-top: 0px solid var(--border-color); }
-        .topic-card.open .topic-body { max-height: 1500px; border-top: 1px solid var(--border-color); transition: max-height 0.5s ease-in-out; }
+        /* Aylık Takvim Bölümü */
+        .calendar-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 18px; padding: 18px; display: flex; flex-direction: column; gap: 14px; box-shadow: var(--shadow); }
+        .section-title { font-size: 1rem; font-weight: 700; color: var(--accent-color); display: flex; align-items: center; gap: 6px; }
         
-        .topic-content-inner { padding: 18px; font-size: 0.9rem; line-height: 1.7; color: var(--text-color); display: flex; flex-direction: column; gap: 10px; }
-        .topic-content-inner p { color: var(--text-color); }
-        .topic-content-inner ul { padding-left: 20px; display: flex; flex-direction: column; gap: 6px; }
-        .ref-box { background: rgba(16, 185, 129, 0.1); border-left: 4px solid var(--accent-color); padding: 10px 14px; border-radius: 0 10px 10px 0; font-size: 0.83rem; color: var(--text-muted); margin-top: 6px; }
-        [dir="rtl"] .ref-box { border-left: none; border-right: 4px solid var(--accent-color); border-radius: 10px 0 0 10px; }
+        .calendar-table-wrapper { 
+            max-height: 380px; 
+            overflow-y: auto; 
+            border-radius: 12px; 
+            border: 1px solid var(--border-color); 
+            position: relative;
+            transform: translateZ(0); 
+        }
+        .calendar-table-wrapper::-webkit-scrollbar { width: 6px; }
+        .calendar-table-wrapper::-webkit-scrollbar-track { background: transparent; }
+        .calendar-table-wrapper::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+
+        .cal-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; text-align: center; }
+        .cal-table th { background: var(--card-bg); color: var(--text-muted); padding: 10px 6px; font-weight: 600; position: sticky; top: 0; z-index: 5; border-bottom: 2px solid var(--border-color); box-shadow: 0 2px 2px rgba(0,0,0,0.05); }
+        .cal-table td { padding: 10px 6px; border-bottom: 1px solid var(--border-color); color: var(--text-color); }
+        .cal-table tr:last-child td { border-bottom: none; }
+        .cal-table tr.today-row { background: var(--btn-hover); font-weight: 700; color: var(--accent-color); }
+        .cal-table tr.today-row td { color: var(--accent-color); }
 
         .footer { margin: 20px 0; text-align: center; font-size: 0.85rem; color: var(--text-muted); }
         .footer span { color: var(--accent-color); font-weight: 600; }
@@ -128,346 +146,297 @@
 <body>
 
 <div class="container">
-    <!-- Navbar -->
     <header class="navbar">
         <a href="../" class="circle-btn" title="Geri Dön">←</a>
-        <div class="app-title">📖 Dev İlmihal Kütüphanesi</div>
+        <div class="app-title">🌙 Ramazan İmsakiyesi</div>
         <button class="circle-btn" onclick="toggleTheme()" id="theme-btn" title="Tema Değiştir">☀️</button>
     </header>
 
-    <!-- Hero Banner -->
-    <div class="ilmihal-hero">
-        <div class="hero-badge">7'den 70'e Güvenilir Kaynak</div>
-        <div class="hero-title">Kapsamlı Dini Bilgiler ve İlmihal</div>
-        <div class="hero-subtitle">İtikat, İbadet, Ahlak ve Güncel Fıkhi Meseleler</div>
+    <!-- Estetik Ramazan Görsel / Grafik Kartı -->
+    <div class="ramadan-hero-banner">
+        <div class="hero-badge" id="hero-badge-text">1447 Hicri</div>
+        <div class="hero-title" id="hero-main-title">On Bir Ayın Sultanı</div>
+        <div class="hero-subtitle" id="hero-sub-title">Bereket, İbadet ve Mağfiret Mevsimi</div>
     </div>
 
-    <!-- Arama Alanı -->
-    <div class="search-box-wrapper">
-        <span class="search-icon">🔍</span>
-        <input type="text" class="search-input" id="search-input" placeholder="Kütüphanede ara (Örn: Abdest, Gusül, Zekat, Vitir)..." oninput="filterTopics()">
+    <!-- Üst Bilgi ve Şehir Seçimi -->
+    <div class="top-banner">
+        <div class="location-info">
+            <span class="location-label">Seçilen İl</span>
+            <span class="location-name" id="selected-city-name">İstanbul</span>
+        </div>
+        <select class="city-select" id="city-selector" onchange="changeCity(this.value)">
+            <!-- 81 İl Dinamik Eklenir -->
+        </select>
     </div>
 
-    <!-- Kategori Filtreleri -->
-    <div class="categories-scroll" id="category-filters">
-        <button class="cat-chip active" onclick="filterCategory('all', this)">Tümü</button>
-        <button class="cat-chip" onclick="filterCategory('itikat', this)">İtikat & İman</button>
-        <button class="cat-chip" onclick="filterCategory('taharet', this)">Taharet (Temizlik)</button>
-        <button class="cat-chip" onclick="filterCategory('namaz', this)">Namaz</button>
-        <button class="cat-chip" onclick="filterCategory('oruc', this)">Oruç</button>
-        <button class="cat-chip" onclick="filterCategory('zekat', this)">Zekat & Hac</button>
-        <button class="cat-chip" onclick="filterCategory('guncel', this)">Güncel Fıkıh</button>
-        <button class="cat-chip" onclick="filterCategory('ahlak', this)">Ahlak & Adab</button>
-    </div>
-
-    <!-- Konular Listesi (Dev Arşiv) -->
-    <div class="topics-list" id="topics-container">
-
-        <!-- 1. İtikat -->
-        <div class="topic-card" data-category="itikat" data-keywords="iman islam imanin sartlari kelimei tevhid">
-            <div class="topic-header" onclick="toggleCard(this)">
-                <div class="topic-info">
-                    <span class="topic-category-tag">İtikat & İman</span>
-                    <span class="topic-title">İmanın ve İslam'ın Şartları Detaylı Açıklaması</span>
+    <!-- İçerik Alanı (Dinamik: Ramazan İçi veya Ramazana Kalan Sayaç) -->
+    <div id="ramadan-active-content" style="display: flex; flex-direction: column; gap: 16px;">
+        
+        <!-- Geri Sayım Kartı -->
+        <div class="countdown-card">
+            <div class="countdown-title" id="countdown-label">İftara Kalan Süre</div>
+            <div class="countdown-target" id="countdown-target-text">Akşam Vaktine</div>
+            <div class="timer-grid">
+                <div class="timer-box" id="box-days" style="display: none;">
+                    <span class="timer-val" id="days">00</span>
+                    <span class="timer-lbl">Gün</span>
                 </div>
-                <span class="topic-arrow">▼</span>
-            </div>
-            <div class="topic-body">
-                <div class="topic-content-inner">
-                    <p>İslam dini inanç esasları (itikat) ve amelî esaslar (ibadet) olmak üzere ikiye ayrılır.</p>
-                    <p><strong>İmanın 6 Şartı:</strong></p>
-                    <ul>
-                        <li><strong>Allah'a İman:</strong> O'nun varlığına ve birliğine (Tevhid) eksiksiz inanmak.</li>
-                        <li><strong>Meleklerine İman:</strong> Nurdan yaratılmış, iradesiz ve günahsız kullar olduklarını bilmek.</li>
-                        <li><strong>Kitaplarına İman:</strong> Allah tarafından peygamberlere indirilen ilahi kitaplara inanmak.</li>
-                        <li><strong>Peygamberlerine İman:</strong> Hz. Âdem'den Hz. Muhammed'e (s.a.v.) kadar gelen tüm nebilere iman etmek.</li>
-                        <li><strong>Ahiret Gününe İman:</strong> Kıyamet, mahşer, hesap, cennet ve cehennemin hak olduğuna inanmak.</li>
-                        <li><strong>Kaza ve Kadere İman:</strong> Hayır ve şerrin Allah'ın takdiriyle gerçekleştiğine inanmak.</li>
-                    </ul>
-                    <p><strong>İslam'ın 5 Şartı:</strong> Kelime-i şehadet getirmek, namaz kılmak, oruç tutmak, zekat vermek ve hacca gitmek.</p>
-                    <div class="ref-box">Kaynak: Ömer Nasuhi Bilmen, Büyük İslam İlmihali</div>
+                <div class="timer-box">
+                    <span class="timer-val" id="hours">00</span>
+                    <span class="timer-lbl">Saat</span>
+                </div>
+                <div class="timer-box">
+                    <span class="timer-val" id="minutes">00</span>
+                    <span class="timer-lbl">Dakika</span>
+                </div>
+                <div class="timer-box">
+                    <span class="timer-val" id="seconds">00</span>
+                    <span class="timer-lbl">Saniye</span>
                 </div>
             </div>
         </div>
 
-        <!-- 2. Taharet / Abdest -->
-        <div class="topic-card" data-category="taharet" data-keywords="abdest nasil alinir farzlari sünnetleri mekruhlari">
-            <div class="topic-header" onclick="toggleCard(this)">
-                <div class="topic-info">
-                    <span class="topic-category-tag">Taharet (Temizlik)</span>
-                    <span class="topic-title">Abdestin Farzları, Sünnetleri ve Alınış Usulü</span>
-                </div>
-                <span class="topic-arrow">▼</span>
+        <!-- Vakitler Kutusu (Sadece Ramazan ayında görünür) -->
+        <div class="times-grid" id="vakitler-grid">
+            <div class="time-box">
+                <span class="time-label">İmsak (Sahur)</span>
+                <span class="time-value" id="vakit-imsak">--:--</span>
             </div>
-            <div class="topic-body">
-                <div class="topic-content-inner">
-                    <p>Manevi temizliğin anahtarı olan abdest, usulüne uygun alındığında ibadetlerin kabul vesilesidir.</p>
-                    <p><strong>Abdestin Farzı 4'tür:</strong><br>1. Yüzü bir kez yıkamak.<br>2. Elleri dirseklerle beraber bir kez yıkamak.<br>3. Başın dörtte birini meshetmek.<br>4. Ayakları topuklarla beraber bir kez yıkamak.</p>
-                    <p><strong>Sünnetleri:</strong> Eûzü-besmele çekmek, elleri bileklere kadar yıkamak, misvak kullanmak, ağza ve buruna üçer kez su vermek, uzuvları üçer defa yıkamak ve tertibe riayet etmek.</p>
-                    <div class="ref-box">Kaynak: Diyanet İlmihali</div>
-                </div>
+            <div class="time-box">
+                <span class="time-label">Güneş</span>
+                <span class="time-value" id="vakit-gunes">--:--</span>
             </div>
-        </div>
-
-        <!-- 3. Gusül Abdesti -->
-        <div class="topic-card" data-category="taharet" data-keywords="gusul boy abdesti cünüp ne zaman alınır farzları">
-            <div class="topic-header" onclick="toggleCard(this)">
-                <div class="topic-info">
-                    <span class="topic-category-tag">Taharet (Temizlik)</span>
-                    <span class="topic-title">Gusül (Boy) Abdesti Ne Zaman Alınır, Farzları Nelerdir?</span>
-                </div>
-                <span class="topic-arrow">▼</span>
+            <div class="time-box">
+                <span class="time-label">Öğle</span>
+                <span class="time-value" id="vakit-ogle">--:--</span>
             </div>
-            <div class="topic-body">
-                <div class="topic-content-inner">
-                    <p>Hükmî kirlilikten kurtulmak için bütün vücudun iğne ucu kalmayacak şekilde yıkanmasıdır.</p>
-                    <p><strong>Guslün Farzları 3'tür (Ağza su, buruna su ve tüm bedeni yıkamak):</strong><br>1. Ağza bolca su verip boğgara kadar çalkalamak (mazmaza).<br>2. Buruna bolca su çekip genze kadar ulaştırmak (istinşak).<br>3. Vücutta iğne ucu kadar kuru yer bırakmamak.</p>
-                    <p><strong>Gerektiren Haller:</strong> Cünüplük (ihtilam veya cinsi münasebet), kadınlar için hayız (âdet) ve nifas (lohusalık) hallerinin bitimi.</p>
-                    <div class="ref-box">Kaynak: Heyet / İslam İlmihali</div>
-                </div>
+            <div class="time-box">
+                <span class="time-label">İkindi</span>
+                <span class="time-value" id="vakit-ikindi">--:--</span>
+            </div>
+            <div class="time-box">
+                <span class="time-label">Akşam (İftar)</span>
+                <span class="time-value" id="vakit-aksam">--:--</span>
+            </div>
+            <div class="time-box">
+                <span class="time-label">Yatsı</span>
+                <span class="time-value" id="vakit-yatsi">--:--</span>
             </div>
         </div>
 
-        <!-- 4. Teyemmüm -->
-        <div class="topic-card" data-category="taharet" data-keywords="teyemmüm toprak abdesti ne zaman yapılır">
-            <div class="topic-header" onclick="toggleCard(this)">
-                <div class="topic-info">
-                    <span class="topic-category-tag">Taharet (Temizlik)</span>
-                    <span class="topic-title">Teyemmüm Abdesti Nasıl Alınır ve Ne Zaman Caizdir?</span>
-                </div>
-                <span class="topic-arrow">▼</span>
-            </div>
-            <div class="topic-body">
-                <div class="topic-content-inner">
-                    <p>Su bulunamadığı veya suya ulaşma imkanı olmadığı durumlarda toprak veya toprak cinsinden temiz bir cisme ellerin vurulmasıyla yapılan hükmî temizliktir.</p>
-                    <p><strong>Alınışı:</strong> Niyet edilir, eller temiz toprağa vurulup yüz meshedilir. Tekrar toprağa vurulup kollar dirseklere kadar meshedilir.</p>
-                    <div class="ref-box">Kaynak: Temel Fıkıh Bilgileri</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 5. Namaz Vakitleri ve Rekatlar -->
-        <div class="topic-card" data-category="namaz" data-keywords="namaz rekatlari sabah ogle ikindi aksam yatsi vitir">
-            <div class="topic-header" onclick="toggleCard(this)">
-                <div class="topic-info">
-                    <span class="topic-category-tag">Namaz</span>
-                    <span class="topic-title">5 Vakit Namazın Rekatları ve Kılınış Düzeni</span>
-                </div>
-                <span class="topic-arrow">▼</span>
-            </div>
-            <div class="topic-body">
-                <div class="topic-content-inner">
-                    <p>Müminin miracı olan beş vakit namazın rekat dağılımı şöyledir:</p>
-                    <ul>
-                        <li><strong>Sabah Namazı:</strong> 2 rekat sünnet, 2 rekat farz (Toplam 4).</li>
-                        <li><strong>Öğle Namazı:</strong> 4 rekat ilk sünnet, 4 rekat farz, 2 rekat son sünnet (Toplam 10).</li>
-                        <li><strong>İkindi Namazı:</strong> 4 rekat sünnet (gayri müekked), 4 rekat farz (Toplam 8).</li>
-                        <li><strong>Akşam Namazı:</strong> 3 rekat farz, 2 rekat sünnet (Toplam 5).</li>
-                        <li><strong>Yatsı Namazı:</strong> 4 rekat ilk sünnet, 4 rekat farz, 2 rekat son sünnet, 3 rekat vitir vacip (Toplam 13).</li>
-                    </ul>
-                    <div class="ref-box">Kaynak: Şafii ve Hanefi İlmihalleri</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 6. Namazın Bozulması -->
-        <div class="topic-card" data-category="namaz" data-keywords="namazı bozan haller gülmek konuşmak yemek içmek">
-            <div class="topic-header" onclick="toggleCard(this)">
-                <div class="topic-info">
-                    <span class="topic-category-tag">Namaz</span>
-                    <span class="topic-title">Namazı Bozan Durumlar Nelerdir?</span>
-                </div>
-                <span class="topic-arrow">▼</span>
-            </div>
-            <div class="topic-body">
-                <div class="topic-content-inner">
-                    <p>Namazdayken yapılan bazı fiiller namazı batıl eder (geçersiz kılar):</p>
-                    <ul>
-                        <li>Namazda konuşmak, harf veya ses çıkacak şekilde ağlamak/inlemek.</li>
-                        <li>Bir şey yemek veya içmek.</li>
-                        <li>Kible yönünden göğsünü çevirmek.</li>
-                        <li>Gülmek (yanındakilerin duyacağı şekilde kahkaha ile gülmek abdesti de namazı da bozar; sadece tebessüm bozmaz).</li>
-                        <li>Abdestin bozulması.</li>
-                        <li>Örtülmesi gereken yerin (avret mahalli) açılması.</li>
-                    </ul>
-                    <div class="ref-box">Kaynak: Fetvalar / Dinî Meseleler</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 7. Sehiv Secdesi -->
-        <div class="topic-card" data-category="namaz" data-keywords="sehiv secdesi yanlis namaz ne zaman yapilir">
-            <div class="topic-header" onclick="toggleCard(this)">
-                <div class="topic-info">
-                    <span class="topic-category-tag">Namaz</span>
-                    <span class="topic-title">Sehiv Secdesi (Yanlış Secdesi) Nasıl Yapılır?</span>
-                </div>
-                <span class="topic-arrow">▼</span>
-            </div>
-            <div class="topic-body">
-                <div class="topic-content-inner">
-                    <p>Namazda unutarak vaciplerden birinin geciktirilmesi veya terk edilmesi durumunda namazın sonunda yapılan secdeye denir.</p>
-                    <p><strong>Yapılışı:</strong> Namazın son oturuşunda sadece "Ettehiyyatü" okunur, sağ tarafa selam verilip iki secde yapılır, oturulup Ettehiyyatü, Salli-Barik ve Rabbena duaları okunarak selam verilir.</p>
-                    <div class="ref-box">Kaynak: Büyük İslam İlmihali</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 8. Oruç ve Hükümleri -->
-        <div class="topic-card" data-category="oruc" data-keywords="orucu bozan seyler kefaret kaza imsak sahur">
-            <div class="topic-header" onclick="toggleCard(this)">
-                <div class="topic-info">
-                    <span class="topic-category-tag">Oruç</span>
-                    <span class="topic-title">Orucu Bozan, Kaza ve Kefaret Gerektiren Haller</span>
-                </div>
-                <span class="topic-arrow">▼</span>
-            </div>
-            <div class="topic-body">
-                <div class="topic-content-inner">
-                    <p>Oruç ibadetinde bilerek yapılan bazı ihlaller sadece kaza, bazıları ise hem kaza hem de kefaret (61 gün kesintisiz oruç) gerektirir.</p>
-                    <p><strong>Yalnız Kaza Gerektirenler:</strong> Unutarak yiyip içtikten sonra "orucum zaten bozuldu" diyerek bilinçli şekilde yemeğe devam etmek, dişler arasında nohut tanesi kadar kalan şeyi yutmak, zorla yapılan şeyler.</p>
-                    <p><strong>Kaza ve Kefaret Gerektirenler:</strong> Bilerek ve keyfi olarak yemek, içmek veya cinsel ilişkide bulunmak.</p>
-                    <div class="ref-box">Kaynak: Diyanet Din İşleri Yüksek Kurulu</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 9. Zekat ve Sadaka -->
-        <div class="topic-card" data-category="zekat" data-keywords="zekat kimlere duser nisap miktari fitre sadaka">
-            <div class="topic-header" onclick="toggleCard(this)">
-                <div class="topic-info">
-                    <span class="topic-category-tag">Zekat & Hac</span>
-                    <span class="topic-title">Zekat Kimlere Farzdır, Nisap Miktarı Nedir?</span>
-                </div>
-                <span class="topic-arrow">▼</span>
-            </div>
-            <div class="topic-body">
-                <div class="topic-content-inner">
-                    <p>Zekat; dinen rich (zengin) sayılan müslümanların malının belli bir kısmını ihtiyaç sahibi fakir kimselere vermesidir.</p>
-                    <p><strong>Nisap Miktarı:</strong> 80.18 gram altın veya bunun değerinde nakit para, ticaret malı veya mal varlığına sahip olup üzerinden bir kameri yıl geçmiş olmak.</p>
-                    <p><strong>Oran:</strong> Asıl mal üzerinden kırkta bir (%2.5) oranında zekat verilir.</p>
-                    <div class="ref-box">Kaynak: İslam İlmihali</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 10. Hac ve Umre -->
-        <div class="topic-card" data-category="zekat" data-keywords="hac umre farzlari ihram tavaf say">
-            <div class="topic-header" onclick="toggleCard(this)">
-                <div class="topic-info">
-                    <span class="topic-category-tag">Zekat & Hac</span>
-                    <span class="topic-title">Haccın Farzları ve Temel Ritüelleri Nelerdir?</span>
-                </div>
-                <span class="topic-arrow">▼</span>
-            </div>
-            <div class="topic-body">
-                <div class="topic-content-inner">
-                    <p>Ömründe bir defa gücü yeten müslümanlara farz olan hac ibadeti üç temel rükne dayanır:</p>
-                    <p><strong>Haccın Farzları 3'tür:</strong><br>1. İhrama girmek (Niyet ve kıyafet).<br>2. Arafat'ta vakfe yapmak (Arefe günü).<br>3. Kabe'yi tavaf etmek.</p>
-                    <div class="ref-box">Kaynak: Hac Rehberi / Diyanet</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 11. Güncel Fıkıh: Aşı ve İlaçlar -->
-        <div class="topic-card" data-category="guncel" data-keywords="asi olmak orucu bozar mi igne serumkan vermek">
-            <div class="topic-header" onclick="toggleCard(this)">
-                <div class="topic-info">
-                    <span class="topic-category-tag">Güncel Fıkıh</span>
-                    <span class="topic-title">Aşı Olmak, İğne Vurdurmak ve Serum Takmak Orucu Bozar mı?</span>
-                </div>
-                <span class="topic-arrow">▼</span>
-            </div>
-            <div class="topic-body">
-                <div class="topic-content-inner">
-                    <p>Sağlık amaçlı yapılan müdahalelerde Diyanet İşleri Yüksek Kurulu'nun fetvaları şöyledir:</p>
-                    <p>• <strong>İğne ve Aşılar:</strong> Tedavi amaçlı yapılan, gıda veya vitamin özelliği taşımayan iğneler (kas içi veya damar içi) orucu bozmaz. Ancak ağrıyı dindirmek veya zindelik vermek amacıyla gıda içerikli serumlar orucu bozar.</p>
-                    <div class="ref-box">Kaynak: Diyanet Fetva Kurulu</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 12. Güncel Fıkıh: Diş Tedavisi -->
-        <div class="topic-card" data-category="guncel" data-keywords="dis cekimi dolgu orucu bozar mi kanama">
-            <div class="topic-header" onclick="toggleCard(this)">
-                <div class="topic-info">
-                    <span class="topic-category-tag">Güncel Fıkıh</span>
-                    <span class="topic-title">Oruçluyken Diş Tedavisi Yapılabilir mi, Oruç Bozulur mu?</span>
-                </div>
-                <span class="topic-arrow">▼</span>
-            </div>
-            <div class="topic-body">
-                <div class="topic-content-inner">
-                    <p>Oruçluyken diş çekimi, dolgu veya temizletme işlemleri yapılabilir. Tedavi esnasında çıkan kanın veya suyun boğaza kaçmaması şartıyla oruç bozulmaz. Ancak su veya ilacın mideye kaçması halinde oruç kaza edilir.</p>
-                    <div class="ref-box">Kaynak: Çağdaş Dini Meseleler / Fetvalar</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 13. Ahlak ve Günlük Yaşam -->
-        <div class="topic-card" data-category="ahlak" data-keywords="kul hakki geybet yalan soylemek buyuk gunahlar">
-            <div class="topic-header" onclick="toggleCard(this)">
-                <div class="topic-info">
-                    <span class="topic-category-tag">Ahlak & Adab</span>
-                    <span class="topic-title">Kul Hakkı ve Gıybetin İslam'daki Yeri</span>
-                </div>
-                <span class="topic-arrow">▼</span>
-            </div>
-            <div class="topic-body">
-                <div class="topic-content-inner">
-                    <p>İslam ahlakının temelini dürüstlük, hak gözetmek ve insanlara zarar vermemek oluşturur.</p>
-                    <p>• <strong>Kul Hakkı:</strong> Cenab-ı Hak "kul hakkı" ile huzuruna gelenlerin günahlarını, hak sahibi affetmedikçe affetmeyeceğini bildirmiştir. Gıybet (arkadan çekiştirmek), iftira ve mal gaspı en büyük kul haklarındandır.</p>
-                    <div class="ref-box">Kaynak: Riyazü's-Salihin / Hadis Ansiklopedisi</div>
-                </div>
+        <!-- Aylık İmsakiye Tablosu (Sadece Ramazan ayında görünür) -->
+        <div class="calendar-card" id="calendar-card-container">
+            <div class="section-title">📅 Aylık İmsakiye Takvimi</div>
+            <div class="calendar-table-wrapper">
+                <table class="cal-table">
+                    <thead>
+                        <tr>
+                            <th>Gün</th>
+                            <th>Tarih</th>
+                            <th>İmsak</th>
+                            <th>Güneş</th>
+                            <th>Öğle</th>
+                            <th>İkindi</th>
+                            <th>Akşam</th>
+                            <th>Yatsı</th>
+                        </tr>
+                    </thead>
+                    <tbody id="imsakiye-tbody">
+                        <!-- Dinamik doldurulacak -->
+                    </tbody>
+                </table>
             </div>
         </div>
 
     </div>
-
 </div>
 
-<div class="footer">© Ayetin Vakti • <span>7'den 70'e Güvenilir İlmihal Kütüphanesi</span></div>
+<div class="footer">© Ayetin Vakti • <span>Huzur ve İbadet Rehberliğiniz</span></div>
 
 <script>
-    let currentActiveCategory = 'all';
+    const turkiyeIlleri = [
+        "Adana", "Adıyaman", "Afyonkarahisar", "Ağrı", "Amasya", "Ankara", "Antalya", "Artvin", "Aydın", "Balıkesir",
+        "Bilecik", "Bingöl", "Bitlis", "Bolu", "Burdur", "Bursa", "Çanakkale", "Çankırı", "Çorum", "Denizli",
+        "Diyarbakır", "Edirne", "Elazığ", "Erzincan", "Erzurum", "Eskişehir", "Gaziantep", "Giresun", "Gümüşhane", "Hakkari",
+        "Hatay", "Isparta", "Mersin", "İstanbul", "İzmir", "Kars", "Kastamonu", "Kayseri", "Kırklareli", "Kırşehir",
+        "Kocaeli", "Konya", "Kütahya", "Malatya", "Manisa", "Kahramanmaraş", "Mardin", "Muğla", "Muş", "Nevşehir",
+        "Niğde", "Ordu", "Rize", "Sakarya", "Samsun", "Siirt", "Sinop", "Sivas", "Tekirdağ", "Tokat",
+        "Trabzon", "Tunceli", "Şanlıurfa", "Uşak", "Van", "Yozgat", "Zonguldak", "Aksaray", "Bayburt", "Karaman",
+        "Kırıkkale", "Batman", "Şırnak", "Bartın", "Ardahan", "Iğdır", "Yalova", "Karabük", "Kilis", "Osmaniye", "Düzce"
+    ];
 
-    function toggleCard(headerElement) {
-        const card = headerElement.parentElement;
-        const isOpen = card.classList.contains('open');
-        card.classList.toggle('open', !isOpen);
+    const baseImsakiyeData = [
+        { gun: 1, tarih: "1 Mart", imsak: "05:15", gunes: "06:40", ogle: "13:20", ikindi: "16:45", aksam: "19:50", yatsı: "21:10" },
+        { gun: 2, tarih: "2 Mart", imsak: "05:14", gunes: "06:38", ogle: "13:20", ikindi: "16:46", aksam: "19:51", yatsı: "21:11" },
+        { gun: 3, tarih: "3 Mart", imsak: "05:12", gunes: "06:37", ogle: "13:20", ikindi: "16:47", aksam: "19:52", yatsı: "21:12" },
+        { gun: 4, tarih: "4 Mart", imsak: "05:11", gunes: "06:35", ogle: "13:20", ikindi: "16:48", aksam: "19:53", yatsı: "21:13" },
+        { gun: 5, tarih: "5 Mart", imsak: "05:09", gunes: "06:34", ogle: "13:20", ikindi: "16:49", aksam: "19:54", yatsı: "21:14" },
+        { gun: 6, tarih: "6 Mart", imsak: "05:08", gunes: "06:32", ogle: "13:20", ikindi: "16:50", aksam: "19:55", yatsı: "21:15" },
+        { gun: 7, tarih: "7 Mart", imsak: "05:06", gunes: "06:31", ogle: "13:19", ikindi: "16:51", aksam: "19:56", yatsı: "21:16" },
+        { gun: 8, tarih: "8 Mart", imsak: "05:05", gunes: "06:29", ogle: "13:19", ikindi: "16:52", aksam: "19:57", yatsı: "21:17" },
+        { gun: 9, tarih: "9 Mart", imsak: "05:03", gunes: "06:28", ogle: "13:19", ikindi: "16:53", aksam: "19:58", yatsı: "21:18" },
+        { gun: 10, tarih: "10 Mart", imsak: "05:02", gunes: "06:26", ogle: "13:19", ikindi: "16:54", aksam: "19:59", yatsı: "21:19" },
+        { gun: 11, tarih: "11 Mart", imsak: "05:00", gunes: "06:25", ogle: "13:19", ikindi: "16:55", aksam: "20:00", yatsı: "21:20" },
+        { gun: 12, tarih: "12 Mart", imsak: "04:58", gunes: "06:23", ogle: "13:18", ikindi: "16:55", aksam: "20:01", yatsı: "21:21" },
+        { gun: 13, tarih: "13 Mart", imsak: "04:57", gunes: "06:22", ogle: "13:18", ikindi: "16:56", aksam: "20:02", yatsı: "21:22" },
+        { gun: 14, tarih: "14 Mart", imsak: "04:55", gunes: "06:20", ogle: "13:18", ikindi: "16:57", aksam: "20:03", yatsı: "21:23" },
+        { gun: 15, tarih: "15 Mart", imsak: "04:54", gunes: "06:19", ogle: "13:18", ikindi: "16:58", aksam: "20:04", yatsı: "21:24" },
+        { gun: 16, tarih: "16 Mart", imsak: "04:52", gunes: "06:17", ogle: "13:17", ikindi: "16:59", aksam: "20:05", yatsı: "21:25" },
+        { gun: 17, tarih: "17 Mart", imsak: "04:50", gunes: "06:15", ogle: "13:17", ikindi: "17:00", aksam: "20:06", yatsı: "21:26" },
+        { gun: 18, tarih: "18 Mart", imsak: "04:48", gunes: "06:14", ogle: "13:17", ikindi: "17:01", aksam: "20:07", yatsı: "21:28" },
+        { gun: 19, tarih: "19 Mart", imsak: "04:47", gunes: "06:12", ogle: "13:17", ikindi: "17:02", aksam: "20:08", yatsı: "21:29" },
+        { gun: 20, tarih: "20 Mart", imsak: "04:45", gunes: "06:10", ogle: "13:16", ikindi: "17:02", aksam: "20:09", yatsı: "21:30" },
+        { gun: 21, tarih: "21 Mart", imsak: "04:43", gunes: "06:09", ogle: "13:16", ikindi: "17:03", aksam: "20:10", yatsı: "21:31" },
+        { gun: 22, tarih: "22 Mart", imsak: "04:41", gunes: "06:07", ogle: "13:16", ikindi: "17:04", aksam: "20:11", yatsı: "21:32" },
+        { gun: 23, tarih: "23 Mart", imsak: "04:39", gunes: "06:05", ogle: "13:15", ikindi: "17:05", aksam: "20:12", yatsı: "21:34" },
+        { gun: 24, tarih: "24 Mart", imsak: "04:37", gunes: "06:04", ogle: "13:15", ikindi: "17:06", aksam: "20:13", yatsı: "21:35" },
+        { gun: 25, tarih: "25 Mart", imsak: "04:35", gunes: "06:02", ogle: "13:15", ikindi: "17:06", aksam: "20:14", yatsı: "21:36" },
+        { gun: 26, tarih: "26 Mart", imsak: "04:34", gunes: "06:00", ogle: "13:15", ikindi: "17:07", aksam: "20:15", yatsı: "21:37" },
+        { gun: 27, tarih: "27 Mart", imsak: "04:32", gunes: "05:58", ogle: "13:14", ikindi: "17:08", aksam: "20:16", yatsı: "21:39" },
+        { gun: 28, tarih: "28 Mart", imsak: "04:30", gunes: "05:57", ogle: "13:14", ikindi: "17:09", aksam: "20:17", yatsı: "21:40" },
+        { gun: 29, tarih: "29 Mart", imsak: "04:28", gunes: "05:55", ogle: "13:14", ikindi: "17:09", aksam: "20:18", yatsı: "21:41" },
+        { gun: 30, tarih: "30 Mart", imsak: "04:26", gunes: "05:53", ogle: "13:13", ikindi: "17:10", aksam: "20:19", yatsı: "21:43" }
+    ];
+
+    function getCityAdjustedData(cityName) {
+        let offsetMinutes = 0;
+        const eastCities = ["Erzurum", "Van", "Kars", "Ağrı", "Iğdır", "Ardahan", "Hakkari", "Bitlis", "Muş", "Bingöl", "Tunceli", "Erzincan", "Bayburt", "Rize", "Artvin", "Trabzon", "Giresun", "Ordu", "Sivas", "Malatya", "Elazığ", "Diyarbakır", "Mardin", "Batman", "Siirt", "Şırnak", "Gaziantep", "Adıyaman", "Şanlıurfa", "Kilis", "Kahramanmaraş"];
+        const centralCities = ["Ankara", "Konya", "Kayseri", "Sivas", "Yozgat", "Nevşehir", "Niğde", "Aksaray", "Karaman", "Kırıkkale", "Kırşehir", "Çankırı", "Çorum", "Amasya", "Tokat"];
+
+        if (eastCities.includes(cityName)) offsetMinutes = -45;
+        else if (centralCities.includes(cityName)) offsetMinutes = -20;
+
+        return baseImsakiyeData.map(item => ({
+            ...item,
+            imsak: adjustTime(item.imsak, offsetMinutes),
+            gunes: adjustTime(item.gunes, offsetMinutes),
+            ogle: adjustTime(item.ogle, offsetMinutes),
+            ikindi: adjustTime(item.ikindi, offsetMinutes),
+            aksam: adjustTime(item.aksam, offsetMinutes),
+            yatsı: adjustTime(item.yatsı, offsetMinutes)
+        }));
     }
 
-    function filterCategory(category, chipElement) {
-        currentActiveCategory = category;
-        document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
-        chipElement.classList.add('active');
-        applyFilters();
+    function adjustTime(timeStr, minutesToAdd) {
+        let [h, m] = timeStr.split(':').map(Number);
+        let totalMins = h * 60 + m + minutesToAdd;
+        let newH = Math.floor(totalMins / 60) % 24;
+        let newM = totalMins % 60;
+        return String(newH).padStart(2, '0') + ':' + String(newM).padStart(2, '0');
     }
 
-    function filterTopics() {
-        applyFilters();
-    }
-
-    function applyFilters() {
-        const query = document.getElementById('search-input').value.toLowerCase().trim();
-        const cards = document.querySelectorAll('.topic-card');
-
-        cards.forEach(card => {
-            const category = card.getAttribute('data-category');
-            const keywords = card.getAttribute('data-keywords') || '';
-            const title = card.querySelector('.topic-title').innerText.toLowerCase();
-            const bodyText = card.querySelector('.topic-content-inner').innerText.toLowerCase();
-
-            const matchesCategory = (currentActiveCategory === 'all' || category === currentActiveCategory);
-            const matchesQuery = (query === '' || title.includes(query) || bodyText.includes(query) || keywords.includes(query));
-
-            if (matchesCategory && matchesQuery) {
-                card.style.display = 'block';
-            } else {
-                card.style.display = 'none';
-                card.classList.remove('open');
-            }
+    function populateCitySelector() {
+        const select = document.getElementById('city-selector');
+        select.innerHTML = '';
+        turkiyeIlleri.sort((a, b) => a.localeCompare(b, 'tr')).forEach(city => {
+            const opt = document.createElement('option');
+            opt.value = city;
+            opt.innerText = city;
+            select.appendChild(opt);
         });
+        const savedCity = localStorage.getItem('selected_city') || 'İstanbul';
+        document.getElementById('selected-city-name').innerText = savedCity;
+        select.value = savedCity;
+    }
+
+    function renderTable(cityName, todayIndex = 2) {
+        const tbody = document.getElementById('imsakiye-tbody');
+        tbody.innerHTML = '';
+        const currentCityData = getCityAdjustedData(cityName);
+
+        currentCityData.forEach((row, index) => {
+            const tr = document.createElement('tr');
+            if (index === todayIndex) tr.className = 'today-row';
+            tr.innerHTML = `
+                <td>${row.gun}</td>
+                <td>${row.tarih}</td>
+                <td>${row.imsak}</td>
+                <td>${row.gunes}</td>
+                <td>${row.ogle}</td>
+                <td>${row.ikindi}</td>
+                <td>${row.aksam}</td>
+                <td>${row.yatsı}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+
+        const today = currentCityData[todayIndex] || currentCityData[0];
+        document.getElementById('vakit-imsak').innerText = today.imsak;
+        document.getElementById('vakit-gunes').innerText = today.gunes;
+        document.getElementById('vakit-ogle').innerText = today.ogle;
+        document.getElementById('vakit-ikindi').innerText = today.ikindi;
+        document.getElementById('vakit-aksam').innerText = today.aksam;
+        document.getElementById('vakit-yatsi').innerText = today.yatsı;
+    }
+
+    function changeCity(cityName) {
+        document.getElementById('selected-city-name').innerText = cityName;
+        localStorage.setItem('selected_city', cityName);
+        renderTable(cityName, 2);
+    }
+
+    function checkRamadanAndSetup() {
+        const isRamadanActive = false; // Ramazan ayı dışındayız
+
+        populateCitySelector();
+
+        if (!isRamadanActive) {
+            document.getElementById('vakitler-grid').style.display = 'none';
+            document.getElementById('calendar-card-container').style.display = 'none';
+            document.getElementById('hero-main-title').innerText = "Ramazan-ı Şerif'e Kalan Süre";
+            document.getElementById('hero-sub-title').innerText = "Hasretle Beklenen Mübarek Ay";
+            document.getElementById('countdown-label').innerText = "Ramazan Başlangıcına";
+            document.getElementById('box-days').style.display = 'flex';
+
+            setInterval(updateRamadanCountdown, 1000);
+            updateRamadanCountdown();
+        } else {
+            document.getElementById('vakitler-grid').style.display = 'grid';
+            document.getElementById('calendar-card-container').style.display = 'flex';
+            document.getElementById('box-days').style.display = 'none';
+
+            const savedCity = localStorage.getItem('selected_city') || 'İstanbul';
+            renderTable(savedCity, 2);
+
+            setInterval(updateIftarCountdown, 1000);
+            updateIftarCountdown();
+        }
+    }
+
+    function updateRamadanCountdown() {
+        const ramadanTarget = new Date('2027-02-08T00:00:00');
+        const now = new Date();
+        let diff = Math.floor((ramadanTarget - now) / 1000);
+        if (diff < 0) diff = 0;
+
+        const d = Math.floor(diff / 86400);
+        const h = Math.floor((diff % 86400) / 3600);
+        const m = Math.floor((diff % 3600) / 60);
+        const s = diff % 60;
+
+        document.getElementById('days').innerText = String(d).padStart(2, '0');
+        document.getElementById('hours').innerText = String(h).padStart(2, '0');
+        document.getElementById('minutes').innerText = String(m).padStart(2, '0');
+        document.getElementById('seconds').innerText = String(s).padStart(2, '0');
+        document.getElementById('countdown-target-text').innerText = "Mübarek Kavuşmaya Az Kaldı";
+    }
+
+    function updateIftarCountdown() {
+        const now = new Date();
+        let targetHours = 19;
+        let targetMinutes = 50;
+        let diff = (targetHours * 3600 + targetMinutes * 60) - (now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds());
+        if (diff < 0) diff += 86400;
+
+        const h = Math.floor(diff / 3600);
+        const m = Math.floor((diff % 3600) / 60);
+        const s = diff % 60;
+
+        document.getElementById('hours').innerText = String(h).padStart(2, '0');
+        document.getElementById('minutes').innerText = String(m).padStart(2, '0');
+        document.getElementById('seconds').innerText = String(s).padStart(2, '0');
+        document.getElementById('countdown-target-text').innerText = "Akşam İftar Vaktine";
     }
 
     function initTheme() {
@@ -495,6 +464,7 @@
 
     window.onload = () => {
         initTheme();
+        checkRamadanAndSetup();
     };
 </script>
 </body>
