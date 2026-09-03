@@ -329,7 +329,7 @@
     function populateCitySelector() {
         const select = document.getElementById('city-selector');
         select.innerHTML = '';
-        turkiyeIlleri.sort().forEach(city => {
+        turkiyeIlleri.sort((a, b) => a.localeCompare(b, 'tr')).forEach(city => {
             const opt = document.createElement('option');
             opt.value = city;
             opt.innerText = city;
