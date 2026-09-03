@@ -99,9 +99,12 @@
         .countdown-card { background: linear-gradient(135deg, var(--card-bg), var(--btn-bg)); border: 1px solid var(--border-color); border-radius: 18px; padding: 22px; text-align: center; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 12px; position: relative; overflow: hidden; }
         .countdown-title { font-size: 0.9rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
         .countdown-target { font-size: 1.2rem; font-weight: 700; color: var(--accent-color); }
-        .timer-grid { display: flex; justify-content: center; gap: 12px; margin-top: 4px; }
-        .timer-box { background: var(--btn-bg); border: 1px solid var(--border-color); padding: 10px 12px; border-radius: 12px; min-width: 65px; display: flex; flex-direction: column; gap: 2px; }
-        .timer-val { font-size: 1.25rem; font-weight: 800; color: var(--text-color); }
+        
+        .timer-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 4px; }
+        @media(max-width: 480px) { .timer-grid { grid-template-columns: repeat(4, 1fr); gap: 6px; } }
+        
+        .timer-box { background: var(--btn-bg); border: 1px solid var(--border-color); padding: 10px 6px; border-radius: 12px; display: flex; flex-direction: column; gap: 2px; align-items: center; justify-content: center; }
+        .timer-val { font-size: 1.15rem; font-weight: 800; color: var(--text-color); }
         .timer-lbl { font-size: 0.65rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
 
         /* Vakitler Grid */
@@ -117,7 +120,6 @@
         .calendar-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 18px; padding: 18px; display: flex; flex-direction: column; gap: 14px; box-shadow: var(--shadow); }
         .section-title { font-size: 1rem; font-weight: 700; color: var(--accent-color); display: flex; align-items: center; gap: 6px; }
         
-        /* Tablo kaydırma ve sticky çakışma koruması */
         .calendar-table-wrapper { 
             max-height: 380px; 
             overflow-y: auto; 
@@ -157,28 +159,30 @@
         <div class="hero-subtitle" id="hero-sub-title">Bereket, İbadet ve Mağfiret Mevsimi</div>
     </div>
 
+    <!-- Üst Bilgi ve Şehir Seçimi -->
+    <div class="top-banner">
+        <div class="location-info">
+            <span class="location-label">Seçilen İl</span>
+            <span class="location-name" id="selected-city-name">İstanbul</span>
+        </div>
+        <select class="city-select" id="city-selector" onchange="changeCity(this.value)">
+            <!-- 81 İl Dinamik Eklenir -->
+        </select>
+    </div>
+
     <!-- İçerik Alanı (Dinamik: Ramazan İçi veya Ramazana Kalan Sayaç) -->
     <div id="ramadan-active-content" style="display: flex; flex-direction: column; gap: 16px;">
         
-        <!-- Üst Bilgi ve Şehir Seçimi -->
-        <div class="top-banner">
-            <div class="location-info">
-                <span class="location-label">Seçilen İl</span>
-                <span class="location-name" id="selected-city-name">İstanbul</span>
-            </div>
-            <select class="city-select" id="city-selector" onchange="changeCity(this.value)">
-                <!-- 81 İl Dinamik Eklenir -->
-            </select>
-        </div>
-
-        <!-- Geri Sayım Kartı (Ramazan'da İftara, Ramazan dışında Ramazan'a Kalan Süre) -->
+        <!-- Geri Sayım Kartı -->
         <div class="countdown-card">
             <div class="countdown-title" id="countdown-label">İftara Kalan Süre</div>
             <div class="countdown-target" id="countdown-target-text">Akşam Vaktine</div>
             <div class="timer-grid">
+                <div class="timer-box" id="box-days" style="display: none;">
+                    <span class="timer-val" id="days">00</span>
+                    <span class="timer-lbl">Gün</span>
+                </div>
                 <div class="timer-box">
-                    <span class="timer-val" id="days-box" style="display: none;">00</span>
-                    <span class="timer-lbl" id="days-lbl" style="display: none;">Gün</span>
                     <span class="timer-val" id="hours">00</span>
                     <span class="timer-lbl">Saat</span>
                 </div>
@@ -251,7 +255,6 @@
 <div class="footer">© Ayetin Vakti • <span>Huzur ve İbadet Rehberliğiniz</span></div>
 
 <script>
-    // 81 İl Tam Liste
     const turkiyeIlleri = [
         "Adana", "Adıyaman", "Afyonkarahisar", "Ağrı", "Amasya", "Ankara", "Antalya", "Artvin", "Aydın", "Balıkesir",
         "Bilecik", "Bingöl", "Bitlis", "Bolu", "Burdur", "Bursa", "Çanakkale", "Çankırı", "Çorum", "Denizli",
@@ -332,6 +335,9 @@
             opt.innerText = city;
             select.appendChild(opt);
         });
+        const savedCity = localStorage.getItem('selected_city') || 'İstanbul';
+        document.getElementById('selected-city-name').innerText = savedCity;
+        select.value = savedCity;
     }
 
     function renderTable(cityName, todayIndex = 2) {
@@ -370,35 +376,27 @@
         renderTable(cityName, 2);
     }
 
-    // --- RAMAZAN AYI KONTROLÜ VE SAYAÇ ---
     function checkRamadanAndSetup() {
-        // Test amaçlı true yapabilirsin. Gerçekte Ramazan ayı içerisindey miyiz kontrolü yapılır.
-        // Örn: Ramazan ayı bu yıl Şubat / Mart aylarında kabul edilsin. Şu an Eylül 2026 olduğu için dışarıdayız.
-        const isRamadanActive = false; // Şu an Eylül olduğu için Ramazan dışı sayaç çalışacak.
+        const isRamadanActive = false; // Ramazan ayı dışındayız
+
+        populateCitySelector();
 
         if (!isRamadanActive) {
-            // RAMAZAN DIŞINDAKİ DURUM: Ramazan'a Kalan Sayaç
             document.getElementById('vakitler-grid').style.display = 'none';
             document.getElementById('calendar-card-container').style.display = 'none';
             document.getElementById('hero-main-title').innerText = "Ramazan-ı Şerif'e Kalan Süre";
             document.getElementById('hero-sub-title').innerText = "Hasretle Beklenen Mübarek Ay";
             document.getElementById('countdown-label').innerText = "Ramazan Başlangıcına";
-            document.getElementById('days-box').style.display = 'flex';
-            document.getElementById('days-lbl').style.display = 'block';
+            document.getElementById('box-days').style.display = 'flex';
 
             setInterval(updateRamadanCountdown, 1000);
             updateRamadanCountdown();
         } else {
-            // RAMAZAN İÇİNDEKİ DURUM: İftar/İmsak Sayaç ve Takvim
             document.getElementById('vakitler-grid').style.display = 'grid';
             document.getElementById('calendar-card-container').style.display = 'flex';
-            document.getElementById('days-box').style.display = 'none';
-            document.getElementById('days-lbl').style.display = 'none';
+            document.getElementById('box-days').style.display = 'none';
 
-            populateCitySelector();
             const savedCity = localStorage.getItem('selected_city') || 'İstanbul';
-            document.getElementById('selected-city-name').innerText = savedCity;
-            document.getElementById('city-selector').value = savedCity;
             renderTable(savedCity, 2);
 
             setInterval(updateIftarCountdown, 1000);
@@ -407,7 +405,6 @@
     }
 
     function updateRamadanCountdown() {
-        // Gelecek ilk Ramazan başlangıç tarihi (Örnek simülasyon tarihi)
         const ramadanTarget = new Date('2027-02-08T00:00:00');
         const now = new Date();
         let diff = Math.floor((ramadanTarget - now) / 1000);
@@ -418,7 +415,7 @@
         const m = Math.floor((diff % 3600) / 60);
         const s = diff % 60;
 
-        document.getElementById('days-box').innerText = String(d).padStart(2, '0');
+        document.getElementById('days').innerText = String(d).padStart(2, '0');
         document.getElementById('hours').innerText = String(h).padStart(2, '0');
         document.getElementById('minutes').innerText = String(m).padStart(2, '0');
         document.getElementById('seconds').innerText = String(s).padStart(2, '0');
