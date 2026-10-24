@@ -5,7 +5,8 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- DÜZELTME: Yakınlaştırmayı engelleyen maximum-scale / user-scalable=no kaldırıldı -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title data-i18n="page_title">Ramazan İmsakiyesi | Ayetin Vakti</title>
     <meta name="theme-color" content="#10b981">
     
@@ -30,11 +31,8 @@
         }
 
         const currentLang = localStorage.getItem('user_lang') || 'tr';
-        if (currentLang === 'ar') {
-            document.documentElement.setAttribute('dir', 'rtl');
-        } else {
-            document.documentElement.setAttribute('dir', 'ltr');
-        }
+        document.documentElement.setAttribute('lang', currentLang);
+        document.documentElement.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
     </script>
 
     <style>
@@ -78,15 +76,16 @@
         
         .app-title { font-size: 1.1rem; font-weight: 700; color: var(--accent-color); text-align: center; display: flex; align-items: center; gap: 6px; }
 
-        /* Estetik Ramazan Temalı Banner / Grafik Alanı */
         .ramadan-hero-banner { background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), var(--card-bg)); border: 1px solid var(--border-color); border-radius: 20px; padding: 24px; text-align: center; position: relative; overflow: hidden; box-shadow: var(--shadow); }
         .ramadan-hero-banner::before { content: "🌙"; position: absolute; font-size: 5rem; right: -10px; bottom: -20px; opacity: 0.08; pointer-events: none; }
+        [dir="rtl"] .ramadan-hero-banner::before { right: auto; left: -10px; }
         .hero-badge { display: inline-block; background: var(--btn-bg); border: 1px solid var(--border-color); padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; color: var(--accent-color); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 1px; }
         .hero-title { font-size: 1.3rem; font-weight: 800; color: var(--text-color); margin-bottom: 4px; }
         .hero-subtitle { font-size: 0.85rem; color: var(--text-muted); }
+        .hero-date { margin-top: 8px; font-size: 0.8rem; font-weight: 600; color: var(--accent-color); }
 
-        /* Üst Bilgi ve Şehir Seçimi */
-        .top-banner { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 18px; padding: 18px; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow); }
+        .top-banner { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 18px; padding: 18px; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow); gap: 10px; }
+        [dir="rtl"] .top-banner { flex-direction: row-reverse; }
         .location-info { display: flex; flex-direction: column; gap: 2px; }
         .location-label { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
         .location-name { font-size: 1.05rem; font-weight: 700; color: var(--accent-color); }
@@ -95,48 +94,40 @@
         .city-select:hover, .city-select:focus { border-color: var(--accent-color); background: var(--btn-hover); }
         .city-select option { background: var(--card-bg); color: var(--text-color); }
 
-        /* Geri Sayım Kartı */
         .countdown-card { background: linear-gradient(135deg, var(--card-bg), var(--btn-bg)); border: 1px solid var(--border-color); border-radius: 18px; padding: 22px; text-align: center; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 12px; position: relative; overflow: hidden; }
         .countdown-title { font-size: 0.9rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
         .countdown-target { font-size: 1.2rem; font-weight: 700; color: var(--accent-color); }
         
-        .timer-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 4px; }
-        @media(max-width: 480px) { .timer-grid { grid-template-columns: repeat(4, 1fr); gap: 6px; } }
-        
+        .timer-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 4px; direction: ltr; }
         .timer-box { background: var(--btn-bg); border: 1px solid var(--border-color); padding: 10px 6px; border-radius: 12px; display: flex; flex-direction: column; gap: 2px; align-items: center; justify-content: center; }
-        .timer-val { font-size: 1.15rem; font-weight: 800; color: var(--text-color); }
+        .timer-val { font-size: 1.15rem; font-weight: 800; color: var(--text-color); font-variant-numeric: tabular-nums; }
         .timer-lbl { font-size: 0.65rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
+        .done-msg { font-size: 1rem; font-weight: 700; color: var(--accent-color); padding: 10px 0; }
 
-        /* Vakitler Grid */
         .times-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
         @media(max-width: 480px) { .times-grid { grid-template-columns: repeat(2, 1fr); } }
         
         .time-box { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 14px; padding: 14px; text-align: center; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 6px; transition: 0.2s; }
-        .time-box.active-vakit { border-color: var(--accent-color); background: var(--btn-hover); transform: translateY(-2px); }
+        .time-box.key-vakit { border-color: var(--accent-color); }
         .time-label { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; }
         .time-value { font-size: 1.1rem; font-weight: 700; color: var(--accent-color); }
 
-        /* Aylık Takvim Bölümü */
         .calendar-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 18px; padding: 18px; display: flex; flex-direction: column; gap: 14px; box-shadow: var(--shadow); }
         .section-title { font-size: 1rem; font-weight: 700; color: var(--accent-color); display: flex; align-items: center; gap: 6px; }
+        .table-note { font-size: 0.75rem; color: var(--text-muted); line-height: 1.4; }
+        .table-status { font-size: 0.85rem; color: var(--text-muted); text-align: center; padding: 18px 8px; }
         
-        .calendar-table-wrapper { 
-            max-height: 380px; 
-            overflow-y: auto; 
-            border-radius: 12px; 
-            border: 1px solid var(--border-color); 
-            position: relative;
-            transform: translateZ(0); 
-        }
-        .calendar-table-wrapper::-webkit-scrollbar { width: 6px; }
+        .calendar-table-wrapper { max-height: 420px; overflow: auto; border-radius: 12px; border: 1px solid var(--border-color); position: relative; transform: translateZ(0); }
+        .calendar-table-wrapper::-webkit-scrollbar { width: 6px; height: 6px; }
         .calendar-table-wrapper::-webkit-scrollbar-track { background: transparent; }
         .calendar-table-wrapper::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
 
-        .cal-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; text-align: center; }
-        .cal-table th { background: var(--card-bg); color: var(--text-muted); padding: 10px 6px; font-weight: 600; position: sticky; top: 0; z-index: 5; border-bottom: 2px solid var(--border-color); box-shadow: 0 2px 2px rgba(0,0,0,0.05); }
-        .cal-table td { padding: 10px 6px; border-bottom: 1px solid var(--border-color); color: var(--text-color); }
+        .cal-table { width: 100%; min-width: 440px; border-collapse: collapse; font-size: 0.82rem; text-align: center; direction: ltr; }
+        .cal-table th { background: var(--card-bg); color: var(--text-muted); padding: 10px 6px; font-weight: 600; position: sticky; top: 0; z-index: 5; border-bottom: 2px solid var(--border-color); }
+        .cal-table td { padding: 10px 6px; border-bottom: 1px solid var(--border-color); color: var(--text-color); font-variant-numeric: tabular-nums; }
+        .cal-table td.c-date { text-align: start; white-space: nowrap; }
         .cal-table tr:last-child td { border-bottom: none; }
-        .cal-table tr.today-row { background: var(--btn-hover); font-weight: 700; color: var(--accent-color); }
+        .cal-table tr.today-row { background: var(--btn-hover); font-weight: 700; }
         .cal-table tr.today-row td { color: var(--accent-color); }
 
         .footer { margin: 20px 0; text-align: center; font-size: 0.85rem; color: var(--text-muted); }
@@ -147,114 +138,100 @@
 
 <div class="container">
     <header class="navbar">
-        <a href="../" class="circle-btn" title="Geri Dön">←</a>
-        <div class="app-title">🌙 Ramazan İmsakiyesi</div>
-        <button class="circle-btn" onclick="toggleTheme()" id="theme-btn" title="Tema Değiştir">☀️</button>
+        <a href="../" class="circle-btn" title="Geri Dön" aria-label="Geri Dön" data-i18n-title="back_title">←</a>
+        <div class="app-title" data-i18n="app_title">🌙 Ramazan İmsakiyesi</div>
+        <button class="circle-btn" onclick="toggleTheme()" id="theme-btn" title="Tema Değiştir" aria-label="Tema Değiştir" data-i18n-title="theme_title">☀️</button>
     </header>
 
-    <!-- Estetik Ramazan Görsel / Grafik Kartı -->
     <div class="ramadan-hero-banner">
-        <div class="hero-badge" id="hero-badge-text">1448 Hicri</div>
-        <div class="hero-title" id="hero-main-title">On Bir Ayın Sultanı</div>
-        <div class="hero-subtitle" id="hero-sub-title">Bereket, İbadet ve Mağfiret Mevsimi</div>
+        <div class="hero-badge" id="hero-badge-text">1448</div>
+        <div class="hero-title" id="hero-main-title"></div>
+        <div class="hero-subtitle" id="hero-sub-title"></div>
+        <div class="hero-date" id="hero-date"></div>
     </div>
 
-    <!-- Üst Bilgi ve Şehir Seçimi -->
     <div class="top-banner">
         <div class="location-info">
-            <span class="location-label">Seçilen İl</span>
+            <span class="location-label" data-i18n="selected_city">Seçilen İl</span>
             <span class="location-name" id="selected-city-name">İstanbul</span>
         </div>
-        <select class="city-select" id="city-selector" onchange="changeCity(this.value)">
-            <!-- 81 İl Dinamik Eklenir -->
-        </select>
+        <select class="city-select" id="city-selector" onchange="changeCity(this.value)" aria-label="Şehir"></select>
     </div>
 
-    <!-- İçerik Alanı (Dinamik: Ramazan İçi veya Ramazana Kalan Sayaç) -->
-    <div id="ramadan-active-content" style="display: flex; flex-direction: column; gap: 16px;">
-        
-        <!-- Geri Sayım Kartı -->
+    <div style="display: flex; flex-direction: column; gap: 16px;">
         <div class="countdown-card">
-            <div class="countdown-title" id="countdown-label">İftara Kalan Süre</div>
-            <div class="countdown-target" id="countdown-target-text">Akşam Vaktine</div>
-            <div class="timer-grid">
+            <div class="countdown-title" id="countdown-label"></div>
+            <div class="countdown-target" id="countdown-target-text"></div>
+            <div class="timer-grid" id="timer-grid">
                 <div class="timer-box" id="box-days" style="display: none;">
                     <span class="timer-val" id="days">00</span>
-                    <span class="timer-lbl">Gün</span>
+                    <span class="timer-lbl" data-i18n="u_day">Gün</span>
                 </div>
                 <div class="timer-box">
                     <span class="timer-val" id="hours">00</span>
-                    <span class="timer-lbl">Saat</span>
+                    <span class="timer-lbl" data-i18n="u_hour">Saat</span>
                 </div>
                 <div class="timer-box">
                     <span class="timer-val" id="minutes">00</span>
-                    <span class="timer-lbl">Dakika</span>
+                    <span class="timer-lbl" data-i18n="u_min">Dakika</span>
                 </div>
                 <div class="timer-box">
                     <span class="timer-val" id="seconds">00</span>
-                    <span class="timer-lbl">Saniye</span>
+                    <span class="timer-lbl" data-i18n="u_sec">Saniye</span>
                 </div>
             </div>
+            <div class="done-msg" id="done-msg" style="display: none;"></div>
         </div>
 
-        <!-- Vakitler Kutusu (Sadece Ramazan ayında görünür) -->
-        <div class="times-grid" id="vakitler-grid">
-            <div class="time-box">
-                <span class="time-label">İmsak (Sahur)</span>
-                <span class="time-value" id="vakit-imsak">--:--</span>
-            </div>
-            <div class="time-box">
-                <span class="time-label">Güneş</span>
-                <span class="time-value" id="vakit-gunes">--:--</span>
-            </div>
-            <div class="time-box">
-                <span class="time-label">Öğle</span>
-                <span class="time-value" id="vakit-ogle">--:--</span>
-            </div>
-            <div class="time-box">
-                <span class="time-label">İkindi</span>
-                <span class="time-value" id="vakit-ikindi">--:--</span>
-            </div>
-            <div class="time-box">
-                <span class="time-label">Akşam (İftar)</span>
-                <span class="time-value" id="vakit-aksam">--:--</span>
-            </div>
-            <div class="time-box">
-                <span class="time-label">Yatsı</span>
-                <span class="time-value" id="vakit-yatsi">--:--</span>
-            </div>
+        <div class="times-grid" id="vakitler-grid" style="display: none;">
+            <div class="time-box key-vakit"><span class="time-label" data-i18n="t_imsak">İmsak (Sahur)</span><span class="time-value" id="vakit-imsak">--:--</span></div>
+            <div class="time-box"><span class="time-label" data-i18n="t_gunes">Güneş</span><span class="time-value" id="vakit-gunes">--:--</span></div>
+            <div class="time-box"><span class="time-label" data-i18n="t_ogle">Öğle</span><span class="time-value" id="vakit-ogle">--:--</span></div>
+            <div class="time-box"><span class="time-label" data-i18n="t_ikindi">İkindi</span><span class="time-value" id="vakit-ikindi">--:--</span></div>
+            <div class="time-box key-vakit"><span class="time-label" data-i18n="t_aksam">Akşam (İftar)</span><span class="time-value" id="vakit-aksam">--:--</span></div>
+            <div class="time-box"><span class="time-label" data-i18n="t_yatsi">Yatsı</span><span class="time-value" id="vakit-yatsi">--:--</span></div>
         </div>
 
-        <!-- Aylık İmsakiye Tablosu (Sadece Ramazan ayında görünür) -->
         <div class="calendar-card" id="calendar-card-container">
-            <div class="section-title">📅 Aylık İmsakiye Takvimi</div>
-            <div class="calendar-table-wrapper">
+            <div class="section-title" data-i18n="table_title">📅 Aylık İmsakiye Takvimi</div>
+            <div class="table-note" id="table-note"></div>
+            <div class="table-status" id="table-status"></div>
+            <div class="calendar-table-wrapper" id="table-wrapper" style="display: none;">
                 <table class="cal-table">
                     <thead>
                         <tr>
-                            <th>Gün</th>
-                            <th>Tarih</th>
-                            <th>İmsak</th>
-                            <th>Güneş</th>
-                            <th>Öğle</th>
-                            <th>İkindi</th>
-                            <th>Akşam</th>
-                            <th>Yatsı</th>
+                            <th data-i18n="th_day">Gün</th>
+                            <th data-i18n="th_date">Tarih</th>
+                            <th data-i18n="th_imsak">İmsak</th>
+                            <th data-i18n="th_gunes">Güneş</th>
+                            <th data-i18n="th_ogle">Öğle</th>
+                            <th data-i18n="th_ikindi">İkindi</th>
+                            <th data-i18n="th_aksam">Akşam</th>
+                            <th data-i18n="th_yatsi">Yatsı</th>
                         </tr>
                     </thead>
-                    <tbody id="imsakiye-tbody">
-                        <!-- Dinamik doldurulacak -->
-                    </tbody>
+                    <tbody id="imsakiye-tbody"></tbody>
                 </table>
             </div>
         </div>
-
     </div>
 </div>
 
-<div class="footer">© Ayetin Vakti • <span>Huzur ve İbadet Rehberliğiniz</span></div>
+<div class="footer">© Ayetin Vakti • <span data-i18n="footer_slogan">Huzur ve İbadet Rehberliğiniz</span></div>
 
 <script>
+    // ===================== AYARLAR =====================
+    // Vakitler Aladhan API'sinin Diyanet yöntemiyle (method=13) alınır. Diyanet "İmsak" = Aladhan "Fajr".
+    // Resmi imsakiyeyle sapma görürseniz yalnızca buradaki dakikaları düzeltin.
+    const TUNE = { fajr: 0, sunrise: 0, dhuhr: 0, asr: 0, maghrib: 0, isha: 0 };
+
+    // Ramazan başlangıçları (Diyanet dinî günler takvimi). estimate:true = henüz resmî takvimi yayımlanmamış, tahmin.
+    // Yeni yıl yayımlanınca buraya yeni bir satır eklemeniz yeterli.
+    const RAMADAN = [
+        { hijri: 1448, start: '2027-02-08', days: 29, estimate: false },  // 8 Şubat - 8 Mart 2027, Bayram 9-11 Mart
+        { hijri: 1449, start: '2028-01-28', days: 30, estimate: true }
+    ];
+
     const turkiyeIlleri = [
         "Adana", "Adıyaman", "Afyonkarahisar", "Ağrı", "Amasya", "Ankara", "Antalya", "Artvin", "Aydın", "Balıkesir",
         "Bilecik", "Bingöl", "Bitlis", "Bolu", "Burdur", "Bursa", "Çanakkale", "Çankırı", "Çorum", "Denizli",
@@ -266,206 +243,362 @@
         "Kırıkkale", "Batman", "Şırnak", "Bartın", "Ardahan", "Iğdır", "Yalova", "Karabük", "Kilis", "Osmaniye", "Düzce"
     ];
 
-    const baseImsakiyeData = [
-        { gun: 1, tarih: "1 Mart", imsak: "05:15", gunes: "06:40", ogle: "13:20", ikindi: "16:45", aksam: "19:50", yatsı: "21:10" },
-        { gun: 2, tarih: "2 Mart", imsak: "05:14", gunes: "06:38", ogle: "13:20", ikindi: "16:46", aksam: "19:51", yatsı: "21:11" },
-        { gun: 3, tarih: "3 Mart", imsak: "05:12", gunes: "06:37", ogle: "13:20", ikindi: "16:47", aksam: "19:52", yatsı: "21:12" },
-        { gun: 4, tarih: "4 Mart", imsak: "05:11", gunes: "06:35", ogle: "13:20", ikindi: "16:48", aksam: "19:53", yatsı: "21:13" },
-        { gun: 5, tarih: "5 Mart", imsak: "05:09", gunes: "06:34", ogle: "13:20", ikindi: "16:49", aksam: "19:54", yatsı: "21:14" },
-        { gun: 6, tarih: "6 Mart", imsak: "05:08", gunes: "06:32", ogle: "13:20", ikindi: "16:50", aksam: "19:55", yatsı: "21:15" },
-        { gun: 7, tarih: "7 Mart", imsak: "05:06", gunes: "06:31", ogle: "13:19", ikindi: "16:51", aksam: "19:56", yatsı: "21:16" },
-        { gun: 8, tarih: "8 Mart", imsak: "05:05", gunes: "06:29", ogle: "13:19", ikindi: "16:52", aksam: "19:57", yatsı: "21:17" },
-        { gun: 9, tarih: "9 Mart", imsak: "05:03", gunes: "06:28", ogle: "13:19", ikindi: "16:53", aksam: "19:58", yatsı: "21:18" },
-        { gun: 10, tarih: "10 Mart", imsak: "05:02", gunes: "06:26", ogle: "13:19", ikindi: "16:54", aksam: "19:59", yatsı: "21:19" },
-        { gun: 11, tarih: "11 Mart", imsak: "05:00", gunes: "06:25", ogle: "13:19", ikindi: "16:55", aksam: "20:00", yatsı: "21:20" },
-        { gun: 12, tarih: "12 Mart", imsak: "04:58", gunes: "06:23", ogle: "13:18", ikindi: "16:55", aksam: "20:01", yatsı: "21:21" },
-        { gun: 13, tarih: "13 Mart", imsak: "04:57", gunes: "06:22", ogle: "13:18", ikindi: "16:56", aksam: "20:02", yatsı: "21:22" },
-        { gun: 14, tarih: "14 Mart", imsak: "04:55", gunes: "06:20", ogle: "13:18", ikindi: "16:57", aksam: "20:03", yatsı: "21:23" },
-        { gun: 15, tarih: "15 Mart", imsak: "04:54", gunes: "06:19", ogle: "13:18", ikindi: "16:58", aksam: "20:04", yatsı: "21:24" },
-        { gun: 16, tarih: "16 Mart", imsak: "04:52", gunes: "06:17", ogle: "13:17", ikindi: "16:59", aksam: "20:05", yatsı: "21:25" },
-        { gun: 17, tarih: "17 Mart", imsak: "04:50", gunes: "06:15", ogle: "13:17", ikindi: "17:00", aksam: "20:06", yatsı: "21:26" },
-        { gun: 18, tarih: "18 Mart", imsak: "04:48", gunes: "06:14", ogle: "13:17", ikindi: "17:01", aksam: "20:07", yatsı: "21:28" },
-        { gun: 19, tarih: "19 Mart", imsak: "04:47", gunes: "06:12", ogle: "13:17", ikindi: "17:02", aksam: "20:08", yatsı: "21:29" },
-        { gun: 20, tarih: "20 Mart", imsak: "04:45", gunes: "06:10", ogle: "13:16", ikindi: "17:02", aksam: "20:09", yatsı: "21:30" },
-        { gun: 21, tarih: "21 Mart", imsak: "04:43", gunes: "06:09", ogle: "13:16", ikindi: "17:03", aksam: "20:10", yatsı: "21:31" },
-        { gun: 22, tarih: "22 Mart", imsak: "04:41", gunes: "06:07", ogle: "13:16", ikindi: "17:04", aksam: "20:11", yatsı: "21:32" },
-        { gun: 23, tarih: "23 Mart", imsak: "04:39", gunes: "06:05", ogle: "13:15", ikindi: "17:05", aksam: "20:12", yatsı: "21:34" },
-        { gun: 24, tarih: "24 Mart", imsak: "04:37", gunes: "06:04", ogle: "13:15", ikindi: "17:06", aksam: "20:13", yatsı: "21:35" },
-        { gun: 25, tarih: "25 Mart", imsak: "04:35", gunes: "06:02", ogle: "13:15", ikindi: "17:06", aksam: "20:14", yatsı: "21:36" },
-        { gun: 26, tarih: "26 Mart", imsak: "04:34", gunes: "06:00", ogle: "13:15", ikindi: "17:07", aksam: "20:15", yatsı: "21:37" },
-        { gun: 27, tarih: "27 Mart", imsak: "04:32", gunes: "05:58", ogle: "13:14", ikindi: "17:08", aksam: "20:16", yatsı: "21:39" },
-        { gun: 28, tarih: "28 Mart", imsak: "04:30", gunes: "05:57", ogle: "13:14", ikindi: "17:09", aksam: "20:17", yatsı: "21:40" },
-        { gun: 29, tarih: "29 Mart", imsak: "04:28", gunes: "05:55", ogle: "13:14", ikindi: "17:09", aksam: "20:18", yatsı: "21:41" },
-        { gun: 30, tarih: "30 Mart", imsak: "04:26", gunes: "05:53", ogle: "13:13", ikindi: "17:10", aksam: "20:19", yatsı: "21:43" }
-    ];
+    // ===================== DİL SÖZLÜĞÜ =====================
+    const translations = {
+        tr: {
+            page_title: "Ramazan İmsakiyesi | Ayetin Vakti", back_title: "Geri Dön", theme_title: "Tema Değiştir",
+            app_title: "🌙 Ramazan İmsakiyesi", selected_city: "Seçilen İl",
+            u_day: "Gün", u_hour: "Saat", u_min: "Dakika", u_sec: "Saniye",
+            t_imsak: "İmsak (Sahur)", t_gunes: "Güneş", t_ogle: "Öğle", t_ikindi: "İkindi", t_aksam: "Akşam (İftar)", t_yatsi: "Yatsı",
+            table_title: "📅 Aylık İmsakiye Takvimi",
+            th_day: "Gün", th_date: "Tarih", th_imsak: "İmsak", th_gunes: "Güneş", th_ogle: "Öğle", th_ikindi: "İkindi", th_aksam: "Akşam", th_yatsi: "Yatsı",
+            footer_slogan: "Huzur ve İbadet Rehberliğiniz",
+            hero_before_title: "Ramazan-ı Şerif'e Kalan Süre", hero_before_sub: "Hasretle Beklenen Mübarek Ay",
+            hero_during_title: "On Bir Ayın Sultanı", hero_during_sub: "Bereket, İbadet ve Mağfiret Mevsimi",
+            start_prefix: "Ramazan başlangıcı: ", estimate_tag: " (tahmini)",
+            before_label: "İlk Oruca (İmsak) Kalan Süre", before_target: "Mübarek Kavuşmaya Az Kaldı",
+            until_iftar: "İftara Kalan Süre", iftar_target: "Akşam İftar Vaktine",
+            until_imsak: "İmsaka Kalan Süre", sahur_target: "İmsak (Sahurun Bitişi) Vaktine",
+            done_msg: "Ramazan ayı tamamlandı. Bayramınız mübarek olsun! 🌙",
+            status_loading: "İmsakiye yükleniyor...", status_error: "İmsakiye alınamadı, yeniden deneniyor...",
+            table_note: "Vakitler Diyanet yöntemiyle hesaplanır; resmî imsakiyeden 1 dakikaya kadar fark olabilir.",
+            estimate_note: "Bu Ramazan'ın tarihi tahminidir; Diyanet dinî günler takvimi yayımlanınca kesinleşir. "
+        },
+        en: {
+            page_title: "Ramadan Imsakiyah | Ayetin Vakti", back_title: "Back", theme_title: "Toggle Theme",
+            app_title: "🌙 Ramadan Timetable", selected_city: "Selected City",
+            u_day: "Days", u_hour: "Hours", u_min: "Minutes", u_sec: "Seconds",
+            t_imsak: "Imsak (Suhoor)", t_gunes: "Sunrise", t_ogle: "Dhuhr", t_ikindi: "Asr", t_aksam: "Maghrib (Iftar)", t_yatsi: "Isha",
+            table_title: "📅 Monthly Ramadan Timetable",
+            th_day: "Day", th_date: "Date", th_imsak: "Imsak", th_gunes: "Sunrise", th_ogle: "Dhuhr", th_ikindi: "Asr", th_aksam: "Maghrib", th_yatsi: "Isha",
+            footer_slogan: "Your Guide to Peace and Worship",
+            hero_before_title: "Time Left Until Ramadan", hero_before_sub: "The Blessed Month We Long For",
+            hero_during_title: "The Sultan of Eleven Months", hero_during_sub: "A Season of Blessing, Worship and Forgiveness",
+            start_prefix: "Ramadan starts: ", estimate_tag: " (estimated)",
+            before_label: "Time Left Until the First Fast (Imsak)", before_target: "The Blessed Month Is Near",
+            until_iftar: "Time Left Until Iftar", iftar_target: "Until Maghrib (Iftar)",
+            until_imsak: "Time Left Until Imsak", sahur_target: "Until Imsak (End of Suhoor)",
+            done_msg: "Ramadan is complete. Eid Mubarak! 🌙",
+            status_loading: "Loading timetable...", status_error: "Could not load the timetable, retrying...",
+            table_note: "Times are calculated with the Diyanet method; they may differ from the official timetable by up to 1 minute.",
+            estimate_note: "This Ramadan's date is an estimate; it will be confirmed when the Diyanet calendar is published. "
+        },
+        ar: {
+            page_title: "إمساكية رمضان | آية الوقت", back_title: "رجوع", theme_title: "تغيير المظهر",
+            app_title: "🌙 إمساكية رمضان", selected_city: "المدينة المختارة",
+            u_day: "يوم", u_hour: "ساعة", u_min: "دقيقة", u_sec: "ثانية",
+            t_imsak: "الإمساك (السحور)", t_gunes: "الشروق", t_ogle: "الظهر", t_ikindi: "العصر", t_aksam: "المغرب (الإفطار)", t_yatsi: "العشاء",
+            table_title: "📅 إمساكية الشهر",
+            th_day: "اليوم", th_date: "التاريخ", th_imsak: "الإمساك", th_gunes: "الشروق", th_ogle: "الظهر", th_ikindi: "العصر", th_aksam: "المغرب", th_yatsi: "العشاء",
+            footer_slogan: "دليلك للسلام والعبادة",
+            hero_before_title: "الوقت المتبقي لرمضان", hero_before_sub: "الشهر المبارك المنتظر",
+            hero_during_title: "سلطان الشهور", hero_during_sub: "موسم البركة والعبادة والمغفرة",
+            start_prefix: "بداية رمضان: ", estimate_tag: " (تقديري)",
+            before_label: "الوقت المتبقي لأول صيام (الإمساك)", before_target: "اقترب الشهر المبارك",
+            until_iftar: "الوقت المتبقي للإفطار", iftar_target: "حتى أذان المغرب (الإفطار)",
+            until_imsak: "الوقت المتبقي للإمساك", sahur_target: "حتى الإمساك (نهاية السحور)",
+            done_msg: "انتهى شهر رمضان. عيدكم مبارك! 🌙",
+            status_loading: "جاري تحميل الإمساكية...", status_error: "تعذر تحميل الإمساكية، جارٍ إعادة المحاولة...",
+            table_note: "تُحسب الأوقات بطريقة الديانة التركية، وقد تختلف عن الإمساكية الرسمية بما يصل إلى دقيقة.",
+            estimate_note: "تاريخ هذا الشهر تقديري، وسيتأكد عند نشر تقويم الديانة. "
+        }
+    };
+    const lang = translations[localStorage.getItem('user_lang')] ? localStorage.getItem('user_lang') : 'tr';
+    const L = translations[lang];
+    const intlLoc = { tr: 'tr-TR', en: 'en-US', ar: 'ar-u-ca-gregory-nu-latn' }[lang];
 
-    function getCityAdjustedData(cityName) {
-        let offsetMinutes = 0;
-        const eastCities = ["Erzurum", "Van", "Kars", "Ağrı", "Iğdır", "Ardahan", "Hakkari", "Bitlis", "Muş", "Bingöl", "Tunceli", "Erzincan", "Bayburt", "Rize", "Artvin", "Trabzon", "Giresun", "Ordu", "Sivas", "Malatya", "Elazığ", "Diyarbakır", "Mardin", "Batman", "Siirt", "Şırnak", "Gaziantep", "Adıyaman", "Şanlıurfa", "Kilis", "Kahramanmaraş"];
-        const centralCities = ["Ankara", "Konya", "Kayseri", "Sivas", "Yozgat", "Nevşehir", "Niğde", "Aksaray", "Karaman", "Kırıkkale", "Kırşehir", "Çankırı", "Çorum", "Amasya", "Tokat"];
+    // <PURE>
+    // ===================== ZAMAN YARDIMCILARI (Türkiye = UTC+3 sabit) =====================
+    const TR_OFFSET_MS = 3 * 3600 * 1000;
+    function pad2(n) { return String(n).padStart(2, '0'); }
+    function trYMD(ms) { const d = new Date(ms + TR_OFFSET_MS); return { y: d.getUTCFullYear(), m: d.getUTCMonth() + 1, d: d.getUTCDate() }; }
+    function ymdStr(o) { return `${o.y}-${pad2(o.m)}-${pad2(o.d)}`; }
+    function parseYMD(s) { const a = s.split('-').map(Number); return { y: a[0], m: a[1], d: a[2] }; }
+    function addDays(o, n) { const d = new Date(Date.UTC(o.y, o.m - 1, o.d) + n * 86400000); return { y: d.getUTCFullYear(), m: d.getUTCMonth() + 1, d: d.getUTCDate() }; }
+    function toEpoch(o, hhmm) {
+        const m = String(hhmm).match(/(\d{1,2}):(\d{2})/);
+        if (!m) return NaN;
+        return Date.UTC(o.y, o.m - 1, o.d, parseInt(m[1], 10), parseInt(m[2], 10), 0) - TR_OFFSET_MS;
+    }
+    function toAscii(s) {
+        const map = { 'ç': 'c', 'ğ': 'g', 'ı': 'i', 'ö': 'o', 'ş': 's', 'ü': 'u', 'Ç': 'C', 'Ğ': 'G', 'İ': 'I', 'Ö': 'O', 'Ş': 'S', 'Ü': 'U' };
+        return String(s).replace(/[çğıöşüÇĞİÖŞÜ]/g, ch => map[ch]);
+    }
+    function normCity(str) {
+        return String(str || '').toLocaleLowerCase('tr').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/ı/g, 'i').replace(/[^a-z0-9]/g, '');
+    }
+    function periodEnd(p) { return addDays(parseYMD(p.start), p.days - 1); }
+    function pickPeriod(todayStr) {
+        for (const p of RAMADAN) if (todayStr <= ymdStr(periodEnd(p))) return p;
+        return null;
+    }
+    // Dönemi kapsayan (bir gün öncesi ve sonrası dahil) ay listesi
+    function monthsFor(p) {
+        const first = addDays(parseYMD(p.start), -1), last = addDays(periodEnd(p), 1), out = [];
+        let y = first.y, m = first.m;
+        while (y < last.y || (y === last.y && m <= last.m)) { out.push({ y, m }); m++; if (m > 12) { m = 1; y++; } }
+        return out;
+    }
+    // </PURE>
 
-        if (eastCities.includes(cityName)) offsetMinutes = -45;
-        else if (centralCities.includes(cityName)) offsetMinutes = -20;
-
-        return baseImsakiyeData.map(item => ({
-            ...item,
-            imsak: adjustTime(item.imsak, offsetMinutes),
-            gunes: adjustTime(item.gunes, offsetMinutes),
-            ogle: adjustTime(item.ogle, offsetMinutes),
-            ikindi: adjustTime(item.ikindi, offsetMinutes),
-            aksam: adjustTime(item.aksam, offsetMinutes),
-            yatsı: adjustTime(item.yatsı, offsetMinutes)
-        }));
+    const KEYS = ['Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
+    function tuneSig() { return [TUNE.fajr, TUNE.sunrise, TUNE.dhuhr, TUNE.asr, TUNE.maghrib, TUNE.isha].join(','); }
+    function tuneQuery() {
+        if (tuneSig() === '0,0,0,0,0,0') return '';
+        return `&tune=0,${TUNE.fajr},${TUNE.sunrise},${TUNE.dhuhr},${TUNE.asr},${TUNE.maghrib},0,${TUNE.isha},0`;
     }
 
-    function adjustTime(timeStr, minutesToAdd) {
-        let [h, m] = timeStr.split(':').map(Number);
-        let totalMins = h * 60 + m + minutesToAdd;
-        let newH = Math.floor(totalMins / 60) % 24;
-        let newM = totalMins % 60;
-        return String(newH).padStart(2, '0') + ':' + String(newM).padStart(2, '0');
+    // ===================== DURUM =====================
+    const state = { cityName: 'İstanbul', apiCity: 'Istanbul', period: null, data: null, loading: false, seq: 0, retryMs: 3000, retryTimer: null, renderedKey: '' };
+
+    // ===================== VERİ (önbellekli) =====================
+    async function getMonth(apiCity, y, m) {
+        const key = `rm2_${apiCity}_${y}-${pad2(m)}_${tuneSig()}`;
+        try {
+            const cached = JSON.parse(localStorage.getItem(key) || 'null');
+            if (cached && typeof cached === 'object' && Object.keys(cached).length >= 28) return cached;
+        } catch (e) { /* önbellek bozuksa ağdan al */ }
+
+        const url = `https://api.aladhan.com/v1/calendarByCity/${y}/${m}?city=${encodeURIComponent(apiCity)}&country=Turkey&method=13${tuneQuery()}`;
+        const ctrl = new AbortController();
+        const to = setTimeout(() => ctrl.abort(), 15000);
+        let json;
+        try {
+            const res = await fetch(url, { signal: ctrl.signal });
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            json = await res.json();
+        } finally { clearTimeout(to); }
+
+        if (!json || !Array.isArray(json.data)) throw new Error('Geçersiz veri');
+        const out = {};
+        json.data.forEach(item => {
+            const ds = item && item.date && item.date.gregorian && item.date.gregorian.date;   // "08-02-2027"
+            const parts = String(ds || '').split('-');
+            if (parts.length !== 3) return;
+            const t = {};
+            for (const k of KEYS) {
+                const mm = String(item.timings[k] || '').match(/(\d{1,2}):(\d{2})/);
+                if (!mm) return;
+                t[k] = `${pad2(parseInt(mm[1], 10))}:${mm[2]}`;
+            }
+            out[`${parts[2]}-${parts[1]}-${parts[0]}`] = t;
+        });
+        if (Object.keys(out).length < 28) throw new Error('Eksik ay verisi');
+        try { localStorage.setItem(key, JSON.stringify(out)); } catch (e) { /* kota */ }
+        return out;
     }
 
+    async function loadData() {
+        const p = state.period;
+        if (!p || state.loading) return;
+        state.loading = true;
+        const mySeq = ++state.seq;
+        clearTimeout(state.retryTimer);
+        setStatus(L.status_loading, true);
+        try {
+            const merged = {};
+            for (const mo of monthsFor(p)) Object.assign(merged, await getMonth(state.apiCity, mo.y, mo.m));
+            if (mySeq !== state.seq) return;
+            state.data = merged; state.retryMs = 3000; state.renderedKey = '';
+            setStatus('', false);
+            renderAll();
+        } catch (err) {
+            if (mySeq !== state.seq) return;
+            console.error('İmsakiye alınamadı:', err);
+            setStatus(L.status_error, true);
+            state.retryTimer = setTimeout(() => { state.loading = false; loadData(); }, state.retryMs);
+            state.retryMs = Math.min(state.retryMs * 2, 60000);
+            return;
+        } finally {
+            if (mySeq === state.seq) { /* hata yolunda loading bir sonraki denemede açılır */ }
+        }
+        state.loading = false;
+    }
+
+    function setStatus(text, show) {
+        const el = document.getElementById('table-status');
+        el.textContent = text; el.style.display = show ? 'block' : 'none';
+    }
+
+    // ===================== EKRAN =====================
+    function fmtDate(o, opts) {
+        return new Intl.DateTimeFormat(intlLoc, Object.assign({ timeZone: 'UTC' }, opts)).format(new Date(Date.UTC(o.y, o.m - 1, o.d, 12)));
+    }
+
+    function renderAll() {
+        const p = state.period;
+        if (!p) return;
+        const todayStr = ymdStr(trYMD(Date.now()));
+        const before = todayStr < p.start;
+        const key = `${p.start}|${before}|${todayStr}|${state.data ? 1 : 0}`;
+        if (key === state.renderedKey) return;
+        state.renderedKey = key;
+
+        // Hero
+        document.getElementById('hero-badge-text').textContent = `${p.hijri}`;
+        document.getElementById('hero-main-title').textContent = before ? L.hero_before_title : L.hero_during_title;
+        document.getElementById('hero-sub-title').textContent = before ? L.hero_before_sub : L.hero_during_sub;
+        document.getElementById('hero-date').textContent = L.start_prefix + fmtDate(parseYMD(p.start), { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) + (p.estimate ? L.estimate_tag : '');
+        document.getElementById('box-days').style.display = before ? 'flex' : 'none';
+        document.getElementById('vakitler-grid').style.display = (!before && state.data) ? 'grid' : 'none';
+
+        // Not
+        document.getElementById('table-note').textContent = (p.estimate ? L.estimate_note : '') + L.table_note;
+
+        // Bugünün vakitleri
+        if (!before && state.data && state.data[todayStr]) {
+            const t = state.data[todayStr];
+            document.getElementById('vakit-imsak').textContent = t.Fajr;
+            document.getElementById('vakit-gunes').textContent = t.Sunrise;
+            document.getElementById('vakit-ogle').textContent = t.Dhuhr;
+            document.getElementById('vakit-ikindi').textContent = t.Asr;
+            document.getElementById('vakit-aksam').textContent = t.Maghrib;
+            document.getElementById('vakit-yatsi').textContent = t.Isha;
+        }
+
+        // Tablo (kesin tarihli dönemlerde; tahmini dönemde de gösterilir, not düşülür)
+        const tbody = document.getElementById('imsakiye-tbody');
+        const wrap = document.getElementById('table-wrapper');
+        if (!state.data) { wrap.style.display = 'none'; return; }
+        let html = '';
+        for (let i = 0; i < p.days; i++) {
+            const day = addDays(parseYMD(p.start), i), ds = ymdStr(day), t = state.data[ds] || {};
+            html += `<tr class="${ds === todayStr ? 'today-row' : ''}"><td>${i + 1}</td><td class="c-date">${fmtDate(day, { day: 'numeric', month: 'long' })}</td>` +
+                KEYS.map(k => `<td>${t[k] || '--:--'}</td>`).join('') + '</tr>';
+        }
+        tbody.innerHTML = html;
+        wrap.style.display = 'block';
+        const row = tbody.querySelector('.today-row');
+        if (row) wrap.scrollTop = Math.max(0, row.offsetTop - 70);
+    }
+
+    function setTimer(sec) {
+        sec = Math.max(0, Math.floor(sec));
+        document.getElementById('days').textContent = pad2(Math.floor(sec / 86400));
+        document.getElementById('hours').textContent = pad2(Math.floor((sec % 86400) / 3600));
+        document.getElementById('minutes').textContent = pad2(Math.floor((sec % 3600) / 60));
+        document.getElementById('seconds').textContent = pad2(sec % 60);
+    }
+
+    function tick() {
+        const now = Date.now();
+        const todayStr = ymdStr(trYMD(now));
+        const period = pickPeriod(todayStr);
+
+        if (period !== state.period) {                 // dönem değişti (ör. Ramazan bitti, sıradaki yıl)
+            state.period = period; state.data = null; state.renderedKey = ''; state.loading = false; state.seq++;
+            document.getElementById('imsakiye-tbody').innerHTML = '';
+            document.getElementById('table-wrapper').style.display = 'none';
+            if (period) loadData();
+        }
+        if (!period) return;
+        renderAll();
+
+        const before = todayStr < period.start;
+        const labelEl = document.getElementById('countdown-label'), targetEl = document.getElementById('countdown-target-text');
+        const grid = document.getElementById('timer-grid'), done = document.getElementById('done-msg');
+        done.style.display = 'none'; grid.style.display = 'grid';
+
+        if (before) {
+            const startDay = parseYMD(period.start);
+            const first = state.data && state.data[period.start];
+            const target = first ? toEpoch(startDay, first.Fajr) : toEpoch(startDay, '00:00');
+            labelEl.textContent = L.before_label; targetEl.textContent = L.before_target;
+            setTimer((target - now) / 1000);
+            return;
+        }
+
+        if (!state.data) { labelEl.textContent = L.until_iftar; targetEl.textContent = L.status_loading; setTimer(0); return; }
+
+        const endStr = ymdStr(periodEnd(period));
+        const today = trYMD(now), events = [];
+        for (const off of [-1, 0, 1]) {
+            const day = addDays(today, off), ds = ymdStr(day), t = state.data[ds];
+            if (!t) continue;
+            events.push({ type: 'imsak', t: toEpoch(day, t.Fajr), day: ds });
+            events.push({ type: 'iftar', t: toEpoch(day, t.Maghrib), day: ds });
+        }
+        events.sort((a, b) => a.t - b.t);
+        const next = events.find(e => e.t > now);
+
+        if (!next || (next.type === 'imsak' && next.day > endStr)) {
+            grid.style.display = 'none'; done.style.display = 'block'; done.textContent = L.done_msg;
+            labelEl.textContent = ''; targetEl.textContent = '';
+            return;
+        }
+        labelEl.textContent = next.type === 'iftar' ? L.until_iftar : L.until_imsak;
+        targetEl.textContent = next.type === 'iftar' ? L.iftar_target : L.sahur_target;
+        setTimer((next.t - now) / 1000);
+    }
+
+    // ===================== ŞEHİR =====================
     function populateCitySelector() {
         const select = document.getElementById('city-selector');
         select.innerHTML = '';
-        turkiyeIlleri.sort((a, b) => a.localeCompare(b, 'tr')).forEach(city => {
+        turkiyeIlleri.slice().sort((a, b) => a.localeCompare(b, 'tr')).forEach(city => {
             const opt = document.createElement('option');
-            opt.value = city;
-            opt.innerText = city;
+            opt.value = city; opt.textContent = city;
             select.appendChild(opt);
         });
-        const savedCity = localStorage.getItem('selected_city') || 'İstanbul';
-        document.getElementById('selected-city-name').innerText = savedCity;
-        select.value = savedCity;
+        // DÜZELTME: Diğer sayfalarla ortak "user_city" kullanılır; eski "selected_city" yedek olarak okunur
+        const saved = localStorage.getItem('user_city') || localStorage.getItem('selected_city') || 'İstanbul';
+        const want = normCity(saved);
+        const match = turkiyeIlleri.find(c => normCity(c) === want) || 'İstanbul';
+        select.value = match;
+        applyCity(match, false);
     }
 
-    function renderTable(cityName, todayIndex = 2) {
-        const tbody = document.getElementById('imsakiye-tbody');
-        tbody.innerHTML = '';
-        const currentCityData = getCityAdjustedData(cityName);
-
-        currentCityData.forEach((row, index) => {
-            const tr = document.createElement('tr');
-            if (index === todayIndex) tr.className = 'today-row';
-            tr.innerHTML = `
-                <td>${row.gun}</td>
-                <td>${row.tarih}</td>
-                <td>${row.imsak}</td>
-                <td>${row.gunes}</td>
-                <td>${row.ogle}</td>
-                <td>${row.ikindi}</td>
-                <td>${row.aksam}</td>
-                <td>${row.yatsı}</td>
-            `;
-            tbody.appendChild(tr);
-        });
-
-        const today = currentCityData[todayIndex] || currentCityData[0];
-        document.getElementById('vakit-imsak').innerText = today.imsak;
-        document.getElementById('vakit-gunes').innerText = today.gunes;
-        document.getElementById('vakit-ogle').innerText = today.ogle;
-        document.getElementById('vakit-ikindi').innerText = today.ikindi;
-        document.getElementById('vakit-aksam').innerText = today.aksam;
-        document.getElementById('vakit-yatsi').innerText = today.yatsı;
-    }
-
-    function changeCity(cityName) {
-        document.getElementById('selected-city-name').innerText = cityName;
-        localStorage.setItem('selected_city', cityName);
-        renderTable(cityName, 2);
-    }
-
-    function checkRamadanAndSetup() {
-        const isRamadanActive = false; // Ramazan ayı dışındayız
-
-        populateCitySelector();
-
-        if (!isRamadanActive) {
+    function applyCity(name, reload) {
+        state.cityName = name; state.apiCity = toAscii(name);
+        document.getElementById('selected-city-name').textContent = name;
+        if (reload) {
+            state.data = null; state.renderedKey = ''; state.loading = false; state.seq++;
+            document.getElementById('table-wrapper').style.display = 'none';
             document.getElementById('vakitler-grid').style.display = 'none';
-            document.getElementById('calendar-card-container').style.display = 'none';
-            document.getElementById('hero-main-title').innerText = "Ramazan-ı Şerif'e Kalan Süre";
-            document.getElementById('hero-sub-title').innerText = "Hasretle Beklenen Mübarek Ay";
-            document.getElementById('countdown-label').innerText = "Ramazan Başlangıcına";
-            document.getElementById('box-days').style.display = 'flex';
-
-            setInterval(updateRamadanCountdown, 1000);
-            updateRamadanCountdown();
-        } else {
-            document.getElementById('vakitler-grid').style.display = 'grid';
-            document.getElementById('calendar-card-container').style.display = 'flex';
-            document.getElementById('box-days').style.display = 'none';
-
-            const savedCity = localStorage.getItem('selected_city') || 'İstanbul';
-            renderTable(savedCity, 2);
-
-            setInterval(updateIftarCountdown, 1000);
-            updateIftarCountdown();
+            loadData();
         }
     }
 
-    function updateRamadanCountdown() {
-        const ramadanTarget = new Date('2027-02-08T00:00:00');
-        const now = new Date();
-        let diff = Math.floor((ramadanTarget - now) / 1000);
-        if (diff < 0) diff = 0;
-
-        const d = Math.floor(diff / 86400);
-        const h = Math.floor((diff % 86400) / 3600);
-        const m = Math.floor((diff % 3600) / 60);
-        const s = diff % 60;
-
-        document.getElementById('days').innerText = String(d).padStart(2, '0');
-        document.getElementById('hours').innerText = String(h).padStart(2, '0');
-        document.getElementById('minutes').innerText = String(m).padStart(2, '0');
-        document.getElementById('seconds').innerText = String(s).padStart(2, '0');
-        document.getElementById('countdown-target-text').innerText = "Mübarek Kavuşmaya Az Kaldı";
+    function changeCity(name) {
+        localStorage.setItem('user_city', name);
+        localStorage.setItem('selected_city', name);
+        applyCity(name, true);
     }
 
-    function updateIftarCountdown() {
-        const now = new Date();
-        let targetHours = 19;
-        let targetMinutes = 50;
-        let diff = (targetHours * 3600 + targetMinutes * 60) - (now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds());
-        if (diff < 0) diff += 86400;
-
-        const h = Math.floor(diff / 3600);
-        const m = Math.floor((diff % 3600) / 60);
-        const s = diff % 60;
-
-        document.getElementById('hours').innerText = String(h).padStart(2, '0');
-        document.getElementById('minutes').innerText = String(m).padStart(2, '0');
-        document.getElementById('seconds').innerText = String(s).padStart(2, '0');
-        document.getElementById('countdown-target-text').innerText = "Akşam İftar Vaktine";
-    }
-
-    function initTheme() {
-        const savedTheme = localStorage.getItem('theme') || 'dark';
-        applyTheme(savedTheme);
-    }
-
-    function toggleTheme() {
-        const isLight = document.documentElement.getAttribute('data-theme') === 'light';
-        applyTheme(isLight ? 'dark' : 'light');
-    }
-
+    // ===================== TEMA =====================
+    function initTheme() { applyTheme(localStorage.getItem('theme') || 'dark'); }
+    function toggleTheme() { applyTheme(document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light'); }
     function applyTheme(theme) {
         const btn = document.getElementById('theme-btn');
         if (theme === 'light') {
             document.documentElement.setAttribute('data-theme', 'light');
-            if (btn) btn.innerHTML = '🌙'; 
+            if (btn) btn.innerHTML = '🌙';
             localStorage.setItem('theme', 'light');
         } else {
             document.documentElement.removeAttribute('data-theme');
-            if (btn) btn.innerHTML = '☀️'; 
+            if (btn) btn.innerHTML = '☀️';
             localStorage.setItem('theme', 'dark');
         }
     }
 
-    window.onload = () => {
+    // ===================== BAŞLATMA =====================
+    window.addEventListener('load', () => {
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const k = el.getAttribute('data-i18n');
+            if (L[k]) { if (el.tagName === 'TITLE') document.title = L[k]; else el.textContent = L[k]; }
+        });
+        document.querySelectorAll('[data-i18n-title]').forEach(el => {
+            const k = el.getAttribute('data-i18n-title');
+            if (L[k]) { el.title = L[k]; el.setAttribute('aria-label', L[k]); }
+        });
+        document.title = L.page_title;
         initTheme();
-        checkRamadanAndSetup();
-    };
+        populateCitySelector();
+        tick();
+        setInterval(tick, 1000);
+        document.addEventListener('visibilitychange', () => { if (!document.hidden) tick(); });
+        window.addEventListener('online', () => { if (state.period && !state.data) { state.loading = false; loadData(); } });
+    });
 </script>
 </body>
 </html>
