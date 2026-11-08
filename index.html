@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
+    <script src="https://ayetinvakti.github.io/finish.js?v=5"></script>
     <script src="https://ayetinvakti.github.io/menu.js" defer></script>
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
@@ -169,12 +170,12 @@
 <body>
 
 <div class="container">
-    <header class="navbar">
+    <header class="navbar fin-card">
         <div class="nav-group">
-            <a href="https://ayetinvakti.github.io/" class="circle-btn" title="Geri Dön" aria-label="Geri Dön" data-i18n-title="back_title">←</a>
-            <button class="circle-btn" data-drawer-toggle aria-label="Menü" aria-controls="avmDrawer" title="Menü">☰</button>
+            <a href="https://ayetinvakti.github.io/" class="circle-btn fin-btn" title="Geri Dön" aria-label="Geri Dön" data-i18n-title="back_title">←</a>
+            <button class="circle-btn fin-btn" data-drawer-toggle aria-label="Menü" aria-controls="avmDrawer" title="Menü">☰</button>
         </div>
-        <button class="circle-btn" onclick="toggleTheme()" id="theme-btn" title="Tema Değiştir" aria-label="Tema Değiştir" data-i18n-title="theme_title">☀️</button>
+        <button class="circle-btn fin-btn" onclick="toggleTheme()" id="theme-btn" title="Tema Değiştir" aria-label="Tema Değiştir" data-i18n-title="theme_title">☀️</button>
     </header>
     <h1 class="app-title" data-i18n="app_title">🌙 Ramazan İmsakiyesi</h1>
 
@@ -185,7 +186,7 @@
         <div class="hero-date" id="hero-date"></div>
     </div>
 
-    <div class="top-banner">
+    <div class="top-banner fin-card">
         <div class="location-info">
             <span class="location-label" data-i18n="selected_city">Seçilen İl</span>
             <span class="location-name" id="selected-city-name">İstanbul</span>
@@ -227,7 +228,7 @@
             <div class="time-box"><span class="time-label" data-i18n="t_yatsi">Yatsı</span><span class="time-value" id="vakit-yatsi">--:--</span></div>
         </div>
 
-        <div class="calendar-card" id="calendar-card-container">
+        <div class="calendar-card fin-card" id="calendar-card-container">
             <div class="section-title" data-i18n="table_title">📅 Aylık İmsakiye Takvimi</div>
             <div class="table-note" id="table-note"></div>
             <div class="table-status" id="table-status"></div>
