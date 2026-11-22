@@ -178,6 +178,11 @@
         .cal-table tr:last-child td { border-bottom: none; }
         .cal-table tr.today-row { background: var(--btn-hover); font-weight: 700; }
         .cal-table tr.today-row td { color: var(--accent-color); }
+        .cal-table tr.special-row td.c-date { font-weight: 700; }
+        .cal-table tr.special-row { box-shadow: inset 3px 0 0 var(--accent-color); }
+        html[dir="rtl"] .cal-table tr.special-row { box-shadow: inset -3px 0 0 var(--accent-color); }
+        .special-badge { display: block; font-size: 0.68rem; font-weight: 700; color: var(--accent-color); line-height: 1.2; margin-top: 2px; }
+        .special-note { font-size: 0.8rem; color: var(--text-color); margin-top: 10px; line-height: 1.4; }
 
         .footer { margin: 20px 0; text-align: center; font-size: 0.85rem; color: var(--text-muted); }
         .footer span { color: var(--accent-color); font-weight: 600; }
@@ -265,6 +270,7 @@
                     <tbody id="imsakiye-tbody"></tbody>
                 </table>
             </div>
+            <div class="special-note" id="special-note" style="display: none;"></div>
         </div>
     </div>
 </div>
@@ -280,7 +286,9 @@
     // Ramazan başlangıçları (Diyanet dinî günler takvimi). estimate:true = henüz resmî takvimi yayımlanmamış, tahmin.
     // Yeni yıl yayımlanınca buraya yeni bir satır eklemeniz yeterli.
     const RAMADAN = [
-        { hijri: 1448, start: '2027-02-08', days: 29, estimate: false },  // 8 Şubat - 8 Mart 2027, Bayram 9-11 Mart
+        // special: Dini Günler sayfasıyla aynı Diyanet tarihleri (kadir = gecenin akşamı başlar; arife = bayramın bir önceki günü)
+        { hijri: 1448, start: '2027-02-08', days: 29, estimate: false,
+          special: { '2027-03-05': 'kadir', '2027-03-08': 'arife' }, bayram: '2027-03-09' },  // 8 Şubat - 8 Mart 2027, Bayram 9-11 Mart
         { hijri: 1449, start: '2028-01-28', days: 30, estimate: true }
     ];
 
@@ -313,7 +321,8 @@
             until_imsak: "İmsaka Kalan Süre", sahur_target: "İmsak (Sahurun Bitişi) Vaktine",
             done_msg: "Ramazan ayı tamamlandı. Bayramınız mübarek olsun! 🌙",
             status_loading: "İmsakiye yükleniyor...", status_error: "İmsakiye alınamadı, yeniden deneniyor...",
-            table_note: "Vakitler Diyanet yöntemiyle hesaplanır; resmî imsakiyeden 1 dakikaya kadar fark olabilir.",
+            table_note: "Vakitler Diyanet yöntemiyle hesaplanır; resmî imsakiyeyle küçük farklar olabilir. Vakitler il merkezine göredir, ilçelerde fark olabilir.",
+            special_kadir: "Kadir Gecesi (akşam)", special_arife: "Arife", bayram_prefix: "Ramazan Bayramı: ",
             estimate_note: "Bu Ramazan'ın tarihi tahminidir; Diyanet dinî günler takvimi yayımlanınca kesinleşir. "
         },
         en: {
@@ -332,7 +341,8 @@
             until_imsak: "Time Left Until Imsak", sahur_target: "Until Imsak (End of Suhoor)",
             done_msg: "Ramadan is complete. Eid Mubarak! 🌙",
             status_loading: "Loading timetable...", status_error: "Could not load the timetable, retrying...",
-            table_note: "Times are calculated with the Diyanet method; they may differ from the official timetable by up to 1 minute.",
+            table_note: "Times are calculated with the Diyanet method and may differ slightly from the official timetable. They are for the provincial centre; districts may differ.",
+            special_kadir: "Night of Decree (evening)", special_arife: "Eve of Eid", bayram_prefix: "Eid al-Fitr: ",
             estimate_note: "This Ramadan's date is an estimate; it will be confirmed when the Diyanet calendar is published. "
         },
         ar: {
@@ -351,7 +361,8 @@
             until_imsak: "الوقت المتبقي للإمساك", sahur_target: "حتى الإمساك (نهاية السحور)",
             done_msg: "انتهى شهر رمضان. عيدكم مبارك! 🌙",
             status_loading: "جاري تحميل الإمساكية...", status_error: "تعذر تحميل الإمساكية، جارٍ إعادة المحاولة...",
-            table_note: "تُحسب الأوقات بطريقة الديانة التركية، وقد تختلف عن الإمساكية الرسمية بما يصل إلى دقيقة.",
+            table_note: "تُحسب الأوقات بطريقة الديانة التركية، وقد تختلف قليلاً عن الإمساكية الرسمية. الأوقات لمركز الولاية وقد تختلف في الأقضية.",
+            special_kadir: "ليلة القدر (مساءً)", special_arife: "وقفة العيد", bayram_prefix: "عيد الفطر: ",
             estimate_note: "تاريخ هذا الشهر تقديري، وسيتأكد عند نشر تقويم الديانة. "
         }
     };
@@ -515,11 +526,18 @@
         let html = '';
         for (let i = 0; i < p.days; i++) {
             const day = addDays(parseYMD(p.start), i), ds = ymdStr(day), t = state.data[ds] || {};
-            html += `<tr class="${ds === todayStr ? 'today-row' : ''}"><td>${i + 1}</td><td class="c-date">${fmtDate(day, { day: 'numeric', month: 'long' })}</td>` +
+            const sp = p.special && p.special[ds];
+            const spBadge = sp ? `<span class="special-badge">${sp === 'kadir' ? L.special_kadir : L.special_arife}</span>` : '';
+            html += `<tr class="${(ds === todayStr ? 'today-row' : '') + (sp ? ' special-row' : '')}"><td>${i + 1}</td><td class="c-date">${fmtDate(day, { day: 'numeric', month: 'long' })}${spBadge}</td>` +
                 KEYS.map(k => `<td>${t[k] || '--:--'}</td>`).join('') + '</tr>';
         }
         tbody.innerHTML = html;
         wrap.style.display = 'block';
+        const sn = document.getElementById('special-note');
+        if (p.bayram) {
+            sn.textContent = L.bayram_prefix + fmtDate(parseYMD(p.bayram), { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+            sn.style.display = 'block';
+        } else { sn.style.display = 'none'; }
         const row = tbody.querySelector('.today-row');
         if (row) wrap.scrollTop = Math.max(0, row.offsetTop - 70);
     }
